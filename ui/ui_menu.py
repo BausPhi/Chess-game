@@ -10,7 +10,7 @@ class Menu:
 
     def __init__(self):
         # Gui
-        self.gui = tk.Tk(className="Chess")
+        self.gui = tk.Tk()
 
         # Frames
         self.frame1 = tk.Frame(self.gui, width=200, height=30)
@@ -19,6 +19,7 @@ class Menu:
         # Buttons
         self.game_button = tk.Button(self.frame1, text="Start game", command=self.start_game)
         self.aigame_button = tk.Button(self.frame2, text="Start game against AI", command=self.start_game_ai)
+        self.two_ai_button = tk.Button(self.frame2, text="Start game AI vs AI", command=self.start_game_ai)
 
         # Image
         self.image = Image.open("pictures/chess.png")
@@ -28,6 +29,9 @@ class Menu:
         # Labels
         self.label1 = tk.Label(self.gui, image=self.image, width=80, height=80)
         self.label2 = tk.Label(self.gui, text="Chess", width=9, height=2)
+
+        # game gui
+        self.game_gui = None
 
     def start_gui(self):
         # Set gui properties
@@ -55,16 +59,43 @@ class Menu:
         self.gui.mainloop()
 
     def start_game(self):
-        game = Game(mode=0)
-        game.gui.after(0, self.gui.destroy())
-        game.start_game()
+        if self.game_gui is None:
+            game = Game(mode=0)
+            self.game_gui = game
+            self.game_button.config(text="Start new game")
+            self.aigame_button.config(text="Start new game against AI")
+            self.two_ai_button.config(text="Start new game between two AI")
+            game.start_game()
+        else:
+            self.game_gui.gui.destroy()
+            game = Game(mode=0)
+            self.game_gui = game
+            game.start_game()
 
     def start_game_ai(self):
-        game = Game(mode=1)
-        game.gui.after(0, self.gui.destroy())
-        game.start_game()
+        if self.game_gui is None:
+            game = Game(mode=1)
+            self.game_gui = game
+            self.game_button.config(text="Start new game")
+            self.aigame_button.config(text="Start new game against AI")
+            self.two_ai_button.config(text="Start new game between two AI")
+            game.start_game()
+        else:
+            self.game_gui.gui.destroy()
+            game = Game(mode=1)
+            self.game_gui = game
+            game.start_game()
 
     def start_game_both_ai(self):
-        game = Game(mode=2)
-        game.gui.after(0, self.gui.destroy())
-        game.start_game()
+        if self.game_gui is None:
+            game = Game(mode=2)
+            self.game_gui = game
+            self.game_button.config(text="Start new game")
+            self.aigame_button.config(text="Start new game against AI")
+            self.two_ai_button.config(text="Start new game between two AI")
+            game.start_game()
+        else:
+            self.game_gui.gui.destroy()
+            game = Game(mode=2)
+            self.game_gui = game
+            game.start_game()
