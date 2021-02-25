@@ -18,7 +18,7 @@ class Menu:
         self.aigame_button = tk.Button(self.frame2, text="Start game against AI", command=self.start_game_ai)
         self.image = Image.open("pictures/chess.png")
         self.image = self.image.resize((80, 80), Image.ANTIALIAS)
-        self.image= ImageTk.PhotoImage(image=self.image)
+        self.image = ImageTk.PhotoImage(image=self.image)
         self.label1 = tk.Label(self.gui, image=self.image, width=80, height=80)
         self.label2 = tk.Label(self.gui, text="Chess", width=9, height=2)
 
@@ -49,12 +49,15 @@ class Menu:
 
     def start_game(self):
         game = Game(mode=0)
-        game.start_game(self)
+        game.gui.after(0, self.gui.destroy())
+        game.start_game()
 
     def start_game_ai(self):
         game = Game(mode=1)
-        game.start_game(self)
+        game.gui.after(0, self.gui.destroy())
+        game.start_game()
 
     def start_game_both_ai(self):
         game = Game(mode=2)
-        game.start_game(self)
+        game.gui.after(0, self.gui.destroy())
+        game.start_game()
