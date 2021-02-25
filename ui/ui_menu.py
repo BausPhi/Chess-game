@@ -9,29 +9,36 @@ from ui.ui_game import Game
 class Menu:
 
     def __init__(self):
+        # Gui
         self.gui = tk.Tk(className="Chess")
-        # When buttons use width/height and have a text in it => size in chars (1*char = 8px)
-        # When it uses a picture => size in pixels
+
+        # Frames
         self.frame1 = tk.Frame(self.gui, width=200, height=30)
         self.frame2 = tk.Frame(self.gui, width=200, height=30)
+
+        # Buttons
         self.game_button = tk.Button(self.frame1, text="Start game", command=self.start_game)
         self.aigame_button = tk.Button(self.frame2, text="Start game against AI", command=self.start_game_ai)
+
+        # Image
         self.image = Image.open("pictures/chess.png")
         self.image = self.image.resize((80, 80), Image.ANTIALIAS)
         self.image = ImageTk.PhotoImage(image=self.image)
+
+        # Labels
         self.label1 = tk.Label(self.gui, image=self.image, width=80, height=80)
         self.label2 = tk.Label(self.gui, text="Chess", width=9, height=2)
 
     def start_gui(self):
-        # set gui icon
-        self.gui.geometry('%dx%d+%d+%d' % (400, 250, 600, 50))
+        # Set gui properties
+        self.gui.title("Chess")
+        self.gui.geometry('%dx%d+%d+%d' % (400, 275, 760, 300))
         self.gui.resizable(False, False)
         img = ""
         if os.path.isfile("pictures/chess.png"):
             img = tk.Image("photo", file="pictures/chess.png")
         self.gui.tk.call('wm', 'iconphoto', self.gui.w, img)
-        # set gui title
-        self.gui.title("Chess")
+
         # set all elements
         self.frame1.pack_propagate(0)
         self.frame1.pack()
