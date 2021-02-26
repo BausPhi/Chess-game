@@ -8,7 +8,11 @@ class Figure(ABC):
         self.name = name
 
     @abstractmethod
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
+        pass
+
+    @abstractmethod
+    def get_possible_moves(self, pos_start: tuple):
         pass
 
     @abstractmethod
@@ -23,8 +27,11 @@ class King(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♚" + self.color
@@ -37,8 +44,11 @@ class Queen(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♛" + self.color
@@ -51,8 +61,11 @@ class Rook(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♜" + self.color
@@ -65,8 +78,11 @@ class Knight(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♞" + self.color
@@ -79,8 +95,11 @@ class Bishop(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♝" + self.color
@@ -93,8 +112,11 @@ class Pawn(Figure):
         self.color = color
         self.id = id_fig
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
         pass
+
+    def get_possible_moves(self, pos_start: tuple):
+        return []
 
     def __str__(self):
         return "♟" + self.color
@@ -106,7 +128,10 @@ class Empty(Figure):
         super().__init__("Empty")
         self.color = "empty"
 
-    def is_legal_move(self):
+    def is_legal_move(self, pos_start: tuple, pos_end: tuple):
+        return NotImplementedError
+
+    def get_possible_moves(self, pos_start: tuple):
         return NotImplementedError
 
     def __str__(self):

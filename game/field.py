@@ -1,5 +1,7 @@
 from game.figures import *
 
+import copy
+
 
 class Field:
 
@@ -17,6 +19,12 @@ class Field:
                   "|" + str(self.points[i][3]) + "|" + str(self.points[i][4]) + "|" + str(self.points[i][5]) +
                   "|" + str(self.points[i][6]) + "|" + str(self.points[i][7]) + "|")
             print("-------------------------")
+
+    def is_check_mate(self, pos_start: tuple, pos_end: tuple):            # TODO
+        field = copy.deepcopy(self.points)
+        field = movefigures(pos_start, pos_end, field, self)
+        color = field[pos_end[0]][pos_end[1]].color
+        return check_mate_check(field, color)
 
 
 def intialize_board():
@@ -70,3 +78,38 @@ def intialize_board():
                 temp.append(Empty())
         field.append(temp)
     return field
+
+
+def movefigures(pos_start: tuple, pos_end: tuple, field, fields):
+    field[pos_end[0]][pos_end[1]] = field[pos_start[0]][pos_start[1]]
+    field[pos_start[0]][pos_start[1]] = Empty()
+    return field
+    pass
+
+
+def print_board(field):
+    print("-------------------------")
+    for i in range(8):
+        print("|" + str(field[i][0]) + "|" + str(field[i][1]) + "|" + str(field[i][2]) +
+                "|" + str(field[i][3]) + "|" + str(field[i][4]) + "|" + str(field[i][5]) +
+                "|" + str(field[i][6]) + "|" + str(field[i][7]) + "|")
+        print("-------------------------")
+
+
+def check_mate_check(field, color: int):
+    moves = []
+    king_pos = None
+    for i in range(8):
+        for j in range(8):
+            figure = field[i][j]
+            if isinstance(figure, Empty):
+                continue
+            if figure.color != color:
+                continue
+            if isinstance(figure, King):
+                king_pos = (i, j)
+            moves = figure.get_possible_moves((i, j))
+    for move in moves:
+        if king_pos == move:
+            return True
+    return False

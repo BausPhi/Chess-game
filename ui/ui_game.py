@@ -13,7 +13,7 @@ class Game:
         # mode: 0 = Player vs Player, 1 = Player vs AI, 2 = AI vs AI
         self.mode = mode
         self.gui = tk.Toplevel()
-        self.game = GameLogic(self, random.randint(1, 2))
+        self.game = GameLogic(self, random.randint(1, 2), self.mode)
         self.images = {}
         for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
                     "rook_w", "pawn_w"]:
