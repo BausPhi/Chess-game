@@ -39,9 +39,9 @@ class Menu:
         self.gui.geometry('%dx%d+%d+%d' % (400, 275, 760, 300))
         self.gui.resizable(False, False)
         img = ""
-        if os.path.isfile("pictures/chess.png"):
+        if os.path.isfile("pictures/chess.png") and os.name == "posix":
             img = tk.Image("photo", file="pictures/chess.png")
-        self.gui.tk.call('wm', 'iconphoto', self.gui.w, img)
+            self.gui.tk.call('wm', 'iconphoto', self.gui.w, img)
 
         # set all elements
         self.frame1.pack_propagate(0)

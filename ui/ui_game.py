@@ -34,59 +34,78 @@ class Game:
                 if i % 2 == 0:
                     if j % 2 == 0:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
-                        self.tiles.append(tk.Label(self.frames[8*i+j], bg="grey"))
+                        self.tiles.append((tk.Label(self.frames[8*i+j], bg="grey"), j, i))
+                        self.tiles[8*i+j][0].bind("<Button-1>", self.on_click)
                     else:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
-                        self.tiles.append(tk.Label(self.frames[8*i+j], bg="#B47D49"))
+                        self.tiles.append((tk.Label(self.frames[8*i+j], bg="#B47D49"), j, i))
+                        self.tiles[8*i+j][0].bind("<Button-1>", self.on_click)
                 else:
                     if j % 2 == 1:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
-                        self.tiles.append(tk.Label(self.frames[8*i+j], bg="grey"))
+                        self.tiles.append((tk.Label(self.frames[8*i+j], bg="grey"), j, i))
+                        self.tiles[8*i+j][0].bind("<Button-1>", self.on_click)
                     else:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
-                        self.tiles.append(tk.Label(self.frames[8*i+j], bg="#B47D49"))
+                        self.tiles.append((tk.Label(self.frames[8*i+j], bg="#B47D49"), j, i))
+                        self.tiles[8*i+j][0].bind("<Button-1>", self.on_click)
+        self.turn_frame = tk.Frame(self.gui, width=200, height=50, background="grey")
+        if self.game.turn == 2 and mode == 1:
+            self.turn_label = tk.Label(self.turn_frame, text="The bot is playing", bd=5, relief="solid")
+        elif mode == 2:
+            self.turn_label = tk.Label(self.turn_frame, text="The bots are playing against each other", bd=5,
+                                       relief="solid")
+        else:
+            self.turn_label = tk.Label(self.turn_frame, text="Player " + str(self.game.turn) + ", it is your turn",
+                                       bd=5, relief="solid")
 
     def start_game(self):
         self.gui.title("Chess")
-        self.gui.geometry('%dx%d+%d+%d' % (800, 800, 600, 125))
+        self.gui.geometry('%dx%d+%d+%d' % (800, 900, 600, 75))
         self.gui.resizable(False, False)
+        # set all field tiles at the correct position
         for i in range(8):
             for j in range(8):
                 self.frames[8*j+i].pack()
                 self.frames[8*j+i].place(x=i*100, y=j*100)
-                self.tiles[8*j+i].pack(fill=BOTH, expand=True)
-                self.tiles[8*j+i].place(x=0, y=0, width=100, height=100)
+                self.tiles[8*j+i][0].pack(fill=BOTH, expand=True)
+                self.tiles[8*j+i][0].place(x=0, y=0, width=100, height=100)
                 if i == 1:
-                    self.tiles[8*i+j].config(image=self.images['pawn'])
+                    self.tiles[8*i+j][0].config(image=self.images['pawn'])
                 if i == 6:
-                    self.tiles[8 * i + j].config(image=self.images['pawn_w'])
+                    self.tiles[8*i+j][0].config(image=self.images['pawn_w'])
                 if i == 0:
                     if j == 0 or j == 7:
-                        self.tiles[8 * i + j].config(image=self.images['rook'])
+                        self.tiles[8*i+j][0].config(image=self.images['rook'])
                     if j == 1 or j == 6:
-                        self.tiles[8 * i + j].config(image=self.images['knight'])
+                        self.tiles[8*i+j][0].config(image=self.images['knight'])
                     if j == 2 or j == 5:
-                        self.tiles[8 * i + j].config(image=self.images['bishop'])
+                        self.tiles[8*i+j][0].config(image=self.images['bishop'])
                     if j == 3:
-                        self.tiles[8 * i + j].config(image=self.images['king'])
+                        self.tiles[8*i+j][0].config(image=self.images['king'])
                     if j == 4:
-                        self.tiles[8 * i + j].config(image=self.images['queen'])
+                        self.tiles[8*i+j][0].config(image=self.images['queen'])
                 if i == 7:
                     if j == 0 or j == 7:
-                        self.tiles[8 * i + j].config(image=self.images['rook_w'])
+                        self.tiles[8*i+j][0].config(image=self.images['rook_w'])
                     if j == 1 or j == 6:
-                        self.tiles[8 * i + j].config(image=self.images['knight_w'])
+                        self.tiles[8*i+j][0].config(image=self.images['knight_w'])
                     if j == 2 or j == 5:
-                        self.tiles[8 * i + j].config(image=self.images['bishop_w'])
+                        self.tiles[8*i+j][0].config(image=self.images['bishop_w'])
                     if j == 3:
-                        self.tiles[8 * i + j].config(image=self.images['king_w'])
+                        self.tiles[8*i+j][0].config(image=self.images['king_w'])
                     if j == 4:
-                        self.tiles[8 * i + j].config(image=self.images['queen_w'])
+                        self.tiles[8*i+j][0].config(image=self.images['queen_w'])
+        self.turn_frame.pack()
+        self.turn_frame.place(x=300, y=825)
+        self.turn_label.pack(fill=BOTH, expand=True)
+        self.turn_label.place(x=0, y=0, width=200, height=50)
         # If mode = 2, then 2 AI are batteling each other, so we dont click anywhere
         if self.mode == 2:
             self.gui.after(0, self.game.run_game_multiple_ai)
         self.gui.mainloop()
         pass
 
-# Am Ende der Funktion die bei draufdrücken auf Feld passiert muss noch gechecked werden ob AI dran ist.
-# Wenn ja dann mus AI Zug auch noch in dieser Funktion ausgeführt werden
+    def on_click(self, event):
+        self.game.execute_move(event.widget, self.tiles)
+        return
