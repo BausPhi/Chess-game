@@ -3,7 +3,7 @@ import random
 
 from PIL import Image, ImageTk
 from tkinter import BOTH
-from game.logic import GameLogic
+from game.gamerun import GameRun
 
 
 class Game:
@@ -13,7 +13,7 @@ class Game:
         # mode: 0 = Player vs Player, 1 = Player vs AI, 2 = AI vs AI
         self.mode = mode
         self.gui = tk.Toplevel()
-        self.game = GameLogic(self, random.randint(1, 2), self.mode)
+        self.game = GameRun(self, random.randint(1, 2), self.mode)
         self.images = {}
         for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
                     "rook_w", "pawn_w"]:
@@ -107,5 +107,8 @@ class Game:
         pass
 
     def on_click(self, event):
-        self.game.execute_move(event.widget, self.tiles)
-        return
+        status = self.game.execute_move(event.widget, self.tiles)
+        # game over
+        if status == "GAME OVER!":
+            pass    # finish game
+        return status

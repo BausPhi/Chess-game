@@ -5,111 +5,209 @@ import copy
 
 class Field:
 
-    def __init__(self):                 # TODO
-        self.points = intialize_board()
-        # self.print_board()
+    def __init__(self, beginning, empty, field):
+        if beginning:
+            self.points = intialize_board()
+        elif empty:
+            self.points = intialize_board()
+            for i in range(8):
+                for j in range(8):
+                    self.points[i][j] = Empty(pos=(i, j))
+        else:
+            self.points = field
 
-    def to_one_hot_encoding(self):      # TODO
+    '''
+    Converts the field to a one-hot encoded version.
+    Needs to be used for integration of the AI.
+    '''
+    def to_one_hot_encoding(self):  # TODO
         pass
 
+    '''
+    Performs a move on the field
+    If king or rook moves set rochade to False
+    '''
+    def move_figure(self, start: tuple, end: tuple):
+        self.points[end[0]][end[1]] = self.points[start[0]][start[1]]
+        self.points[end[0]][end[1]].position = (end[0], end[1])
+        self.points[start[0]][start[1]] = Empty(pos=(start[0], start[1]))
+        return
+
+    '''
+    Returns a copy of the field.
+    Can be used to simulate moves for example to check if
+    moves result in a mate.
+    '''
+    def field_copy(self):
+        return copy.deepcopy(self.points)
+
+    def king_in_danger(self, player):        # TODO
+        pass
+
+    '''
+    Checks whether a player is check mate.
+    If yes, the game is over
+    '''
+    def is_check_mate(self, player):
+        if not self.king_in_danger(player):
+            return False
+        if player == 1:
+            color = "w"
+        else:
+            color = "b"
+        moves = []
+        for row in self.points:
+            for figure in row:
+                if figure.name == "King" and figure.color == color:
+                    moves = figure.moves
+        for move in moves:
+            copy_field = self.field_copy()
+            copy_field[move['end'][0]][move['end'][1]] = copy_field[move['start'][0]][move['start'][1]]
+            copy_field[move['start'][0]][move['start'][1]] = Empty(pos=(move['start'][0], move['start'][1]))
+            copy_field = Field(beginning=False, empty=False, field=copy_field)
+            if not copy_field.is_mate(player):
+                return False
+        return True
+
+    '''
+    Checks whether a player is check mate.
+    If yes, the game is over
+    '''
+    def is_mate(self, player):               # TODO
+        if player == 1:
+            enemy_color = "b"
+            color = "w"
+        else:
+            enemy_color = "w"
+            color = "b"
+        enemy_figures = []
+        for row in self.points:
+            for figure in row:
+                if figure.color == enemy_color:
+                    enemy_figures.append(figure)
+        king_pos = None
+        for i in range(8):
+            for j in range(8):
+                if self.points[i][j].name == "King" and self.points[i][j].color == color:
+                    king_pos = (i, j)
+        for figure in enemy_figures:
+            for move in figure.get_possible_moves(figure.get_position(self.points)):
+                if move["end"] == king_pos:
+                    return True
+        return False
+        pass
+
+    '''
+    Checks whether the game ended in a draw
+    '''
+    def is_draw(self):               # TODO
+        pass
+
+    '''
+    Calculates every possible move for every figure and saves
+    them in moves field of the figure
+    It is only done for the figures of the player whose turn it is
+    '''
+    def update_all_possible_moves(self, turn):     # TODO
+        pass
+
+    '''
+    Checks if a rochade is possible or not
+    Returns a list of towers, a rochade is possible with
+    '''
+    def rochade_possible(self, turn):              # TODO
+        pass
+
+    '''
+    Checks if there is a pawn at the end of the field
+    and returns the pawn if there is one, else None
+    '''
+    def pawn_at_end(self, turn):
+        for i in range(8):
+            for j in range(8):
+                if j == 7 and turn == 2:
+                    figure = self.points[i][j]
+                    if isinstance(figure, Pawn) and figure.color == "b":
+                        return figure
+                if j == 0 and turn == 1:
+                    figure = self.points[i][j]
+                    if isinstance(figure, Pawn) and figure.color == "w":
+                        return figure
+        return None
+
+    '''
+    Converts a pawn to a given figure
+    '''
+    def convert_pawn(self, pawn, figure):          # TODO
+        pass
+
+    '''
+    Prints the board for debugging code
+    '''
     def print_board(self):
         print("-------------------------")
         for i in range(8):
-            print("|" + str(self.points[i][0]) + "|" + str(self.points[i][1]) + "|" + str(self.points[i][2]) +
-                  "|" + str(self.points[i][3]) + "|" + str(self.points[i][4]) + "|" + str(self.points[i][5]) +
-                  "|" + str(self.points[i][6]) + "|" + str(self.points[i][7]) + "|")
+            print("|" + str(self.points[0][i]) + "|" + str(self.points[1][i]) + "|" + str(self.points[2][i]) +
+                  "|" + str(self.points[3][i]) + "|" + str(self.points[4][i]) + "|" + str(self.points[5][i]) +
+                  "|" + str(self.points[6][i]) + "|" + str(self.points[7][i]) + "|")
             print("-------------------------")
 
-    def is_check_mate(self, pos_start: tuple, pos_end: tuple):            # TODO
-        field = copy.deepcopy(self.points)
-        field = movefigures(pos_start, pos_end, field, self)
-        color = field[pos_end[0]][pos_end[1]].color
-        return check_mate_check(field, color)
 
-
+'''
+Initializes the field at the beginning of the game.
+Initializes the figure elements and sets them at the
+correct position on the field. 
+'''
 def intialize_board():
     color = "w"
     color_b = "b"
-    pawns, rooks, knights, bishops = [], [], [], []
-    pawns_b, rooks_b, knights_b, bishops_b = [], [], [], []
-    for i in range(8):
-        pawns.append(Pawn(color, i))
-        pawns_b.append(Pawn(color_b, i))
-    for i in range(2):
-        rooks.append(Rook(color, i))
-        knights.append(Knight(color, i))
-        bishops.append(Bishop(color, i))
-        rooks_b.append(Rook(color_b, i))
-        knights_b.append(Knight(color_b, i))
-        bishops_b.append(Bishop(color_b, i))
-    king = King(color, 1)
-    queen = Queen(color, 1)
-    king_b = King(color_b, 1)
-    queen_b = Queen(color_b, 1)
     field = []
     for i in range(8):
         temp = []
         if i == 6:
             for j in range(8):
-                temp.append(pawns[j])
+                temp.append(Pawn(color=color, pos=(j, 6)))
         if i == 7:
-            temp.append(rooks[0])
-            temp.append(knights[0])
-            temp.append(bishops[0])
-            temp.append(king)
-            temp.append(queen)
-            temp.append(bishops[1])
-            temp.append(knights[1])
-            temp.append(rooks[1])
+            temp.append(Rook(color=color, pos=(0, 7)))
+            temp.append(Knight(color=color, pos=(1, 7)))
+            temp.append(Bishop(color=color, pos=(2, 7)))
+            temp.append(King(color=color, pos=(3, 7)))
+            temp.append(Queen(color=color, pos=(4, 7)))
+            temp.append(Bishop(color=color, pos=(5, 7)))
+            temp.append(Knight(color=color, pos=(6, 7)))
+            temp.append(Rook(color=color, pos=(7, 7)))
         if i == 1:
             for j in range(8):
-                temp.append(pawns_b[j])
+                temp.append(Pawn(color=color_b, pos=(j, 1)))
         if i == 0:
-            temp.append(rooks_b[0])
-            temp.append(knights_b[0])
-            temp.append(bishops_b[0])
-            temp.append(king_b)
-            temp.append(queen_b)
-            temp.append(bishops_b[1])
-            temp.append(knights_b[1])
-            temp.append(rooks_b[1])
+            temp.append(Rook(color=color_b, pos=(0, 0)))
+            temp.append(Knight(color=color_b, pos=(1, 0)))
+            temp.append(Bishop(color=color_b, pos=(2, 0)))
+            temp.append(King(color=color_b, pos=(3, 0)))
+            temp.append(Queen(color=color_b, pos=(4, 0)))
+            temp.append(Bishop(color=color_b, pos=(5, 0)))
+            temp.append(Knight(color=color_b, pos=(6, 0)))
+            temp.append(Rook(color=color_b, pos=(7, 0)))
         if 1 < i < 6:
             for j in range(8):
-                temp.append(Empty())
+                temp.append(Empty(pos=(j, i)))
         field.append(temp)
-    return field
+    field_reordered = []
+    for i in range(8):
+        spalte = []
+        for j in range(8):
+            spalte.append(field[j][i])
+        field_reordered.append(spalte)
+    return field_reordered
 
 
-def movefigures(pos_start: tuple, pos_end: tuple, field, fields):
-    field[pos_end[0]][pos_end[1]] = field[pos_start[0]][pos_start[1]]
-    field[pos_start[0]][pos_start[1]] = Empty()
-    return field
-    pass
-
-
+'''
+Prints the board for debugging code
+'''
 def print_board(field):
     print("-------------------------")
     for i in range(8):
-        print("|" + str(field[i][0]) + "|" + str(field[i][1]) + "|" + str(field[i][2]) +
-                "|" + str(field[i][3]) + "|" + str(field[i][4]) + "|" + str(field[i][5]) +
-                "|" + str(field[i][6]) + "|" + str(field[i][7]) + "|")
+        print("|" + str(field[0][i]) + "|" + str(field[1][i]) + "|" + str(field[2][i]) +
+              "|" + str(field[3][i]) + "|" + str(field[4][i]) + "|" + str(field[5][i]) +
+              "|" + str(field[6][i]) + "|" + str(field[7][i]) + "|")
         print("-------------------------")
-
-
-def check_mate_check(field, color: int):
-    moves = []
-    king_pos = None
-    for i in range(8):
-        for j in range(8):
-            figure = field[i][j]
-            if isinstance(figure, Empty):
-                continue
-            if figure.color != color:
-                continue
-            if isinstance(figure, King):
-                king_pos = (i, j)
-            moves = figure.get_possible_moves((i, j))
-    for move in moves:
-        if king_pos == move:
-            return True
-    return False
