@@ -90,13 +90,183 @@ class Queen(Figure):
         self.rochade = None
 
     def update_possible_moves(self, field):                   # TODO check for mate
-        pass
+        x = self.position[0]
+        y = self.position[1]
+        possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
+        possible_left, possible_down, possible_right, possible_up = True, True, True, True
+        for i in range(1, 8):
+            temp_moves, possible_left_up = self.possible_moves_left_up(field, x, y, i, possible_left_up)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_left_down = self.possible_moves_left_down(field, x, y, i, possible_left_down)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_right_up = self.possible_moves_right_up(field, x, y, i, possible_right_up)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_right_down = self.possible_moves_right_down(field, x, y, i, possible_right_down)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_left = self.possible_moves_left(field, x, y, i, possible_left)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_down = self.possible_moves_down(field, x, y, i, possible_down)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_right = self.possible_moves_right(field, x, y, i, possible_right)
+            for move in temp_moves:
+                self.moves.append(move)
+            temp_moves, possible_up = self.possible_moves_up(field, x, y, i, possible_up)
+            for move in temp_moves:
+                self.moves.append(move)
 
     def get_possible_moves(self, field):
-        pass
+        moves = []
+        x = self.position[0]
+        y = self.position[1]
+        possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
+        possible_left, possible_down, possible_right, possible_up = True, True, True, True
+        for i in range(1, 8):
+            temp_moves, possible_left_up = self.possible_moves_left_up(field, x, y, i, possible_left_up)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_left_down = self.possible_moves_left_down(field, x, y, i, possible_left_down)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_right_up = self.possible_moves_right_up(field, x, y, i, possible_right_up)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_right_down = self.possible_moves_right_down(field, x, y, i, possible_right_down)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_left = self.possible_moves_left(field, x, y, i, possible_left)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_down = self.possible_moves_down(field, x, y, i, possible_down)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_right = self.possible_moves_right(field, x, y, i, possible_right)
+            for move in temp_moves:
+                moves.append(move)
+            temp_moves, possible_up = self.possible_moves_up(field, x, y, i, possible_up)
+            for move in temp_moves:
+                moves.append(move)
+        return moves
 
     def all_moves(self):
         pass
+
+    def possible_moves_left_up(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x - i >= 0 and y - i >= 0:
+                tile = field[x - i][y - i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x - i, y - i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x - i, y - i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_left_down(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x - i >= 0 and y + i < 8:
+                tile = field[x - i][y + i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x - i, y + i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x - i, y + i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_right_up(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x + i < 8 and y - i >= 0:
+                tile = field[x + i][y - i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x + i, y - i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x + i, y - i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_right_down(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x + i < 8 and y + i < 8:
+                tile = field[x + i][y + i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x + i, y + i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x + i, y + i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_left(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x - i >= 0 and y >= 0:
+                tile = field[x - i][y]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x - i, y)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x - i, y)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_down(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x >= 0 and y + i < 8:
+                tile = field[x][y + i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x, y + i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x, y + i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_right(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x + i < 8 and y >= 0:
+                tile = field[x + i][y]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x + i, y)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x + i, y)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
+
+    def possible_moves_up(self, field, x, y, i, finished):
+        moves = []
+        if finished:
+            if x < 8 and y - i >= 0:
+                tile = field[x][y - i]
+                if isinstance(tile, Empty):
+                    moves.append({"start": self.position, "end": (x, y - i)})
+                elif tile.color != self.color:
+                    moves.append({"start": self.position, "end": (x, y - i)})
+                    finished = False
+                else:
+                    finished = False
+        return moves, finished
 
     def __str__(self):
         return "♛" + self.color
