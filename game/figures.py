@@ -169,13 +169,102 @@ class Bishop(Figure):
         self.rochade = True
 
     def update_possible_moves(self, field):                   # TODO check for mate
-        pass
+        self.moves = []
+        x = self.position[0]
+        y = self.position[1]
+        loop1, loop2, loop3, loop4 = True, True, True, True
+        for i in range(1, 8):
+            if loop1:
+                if x - i >= 0 and y - i >= 0:
+                    tile = field[x - i][y - i]
+                    if isinstance(tile, Empty):
+                        self.moves.append({"start": self.position, "end": (x - i, y - i)})
+                    elif tile.color != self.color:
+                        self.moves.append({"start": self.position, "end": (x - i, y - i)})
+                        loop1 = False
+                    else:
+                        loop1 = False
+            if loop2:
+                if x - i >= 0 and y + i < 8:
+                    tile = field[x - i][y + i]
+                    if isinstance(tile, Empty):
+                        self.moves.append({"start": self.position, "end": (x - i, y + i)})
+                    elif tile.color != self.color:
+                        self.moves.append({"start": self.position, "end": (x - i, y + i)})
+                        loop2 = False
+                    else:
+                        loop2 = False
+            if loop3:
+                if x + i < 8 and y - i >= 0:
+                    tile = field[x + i][y - i]
+                    if isinstance(tile, Empty):
+                        self.moves.append({"start": self.position, "end": (x + i, y - i)})
+                    elif tile.color != self.color:
+                        self.moves.append({"start": self.position, "end": (x + i, y - i)})
+                        loop3 = False
+                    else:
+                        loop3 = False
+            if loop4:
+                if x + i < 8 and y + i < 8:
+                    tile = field[x + i][y + i]
+                    if isinstance(tile, Empty):
+                        self.moves.append({"start": self.position, "end": (x + i, y + i)})
+                    elif tile.color != self.color:
+                        self.moves.append({"start": self.position, "end": (x + i, y + i)})
+                        loop4 = False
+                    else:
+                        loop4 = False
 
     def get_possible_moves(self, field):
-        pass
+        moves = []
+        x = self.position[0]
+        y = self.position[1]
+        loop1, loop2, loop3, loop4 = True, True, True, True
+        for i in range(1, 8):
+            if loop1:
+                if x - i >= 0 and y - i >= 0:
+                    tile = field[x - i][y - i]
+                    if isinstance(tile, Empty):
+                        moves.append({"start": self.position, "end": (x - i, y - i)})
+                    elif tile.color != self.color:
+                        moves.append({"start": self.position, "end": (x - i, y - i)})
+                        loop1 = False
+                    else:
+                        loop1 = False
+            if loop2:
+                if x - i >= 0 and y + i < 8:
+                    tile = field[x - i][y + i]
+                    if isinstance(tile, Empty):
+                        moves.append({"start": self.position, "end": (x - i, y + i)})
+                    elif tile.color != self.color:
+                        moves.append({"start": self.position, "end": (x - i, y + i)})
+                        loop2 = False
+                    else:
+                        loop2 = False
+            if loop3:
+                if x + i < 8 and y - i >= 0:
+                    tile = field[x + i][y - i]
+                    if isinstance(tile, Empty):
+                        moves.append({"start": self.position, "end": (x + i, y - i)})
+                    elif tile.color != self.color:
+                        moves.append({"start": self.position, "end": (x + i, y - i)})
+                        loop3 = False
+                    else:
+                        loop3 = False
+            if loop4:
+                if x + i < 8 and y + i < 8:
+                    tile = field[x + i][y + i]
+                    if isinstance(tile, Empty):
+                        moves.append({"start": self.position, "end": (x + i, y + i)})
+                    elif tile.color != self.color:
+                        moves.append({"start": self.position, "end": (x + i, y + i)})
+                        loop4 = False
+                    else:
+                        loop4 = False
+        return moves
 
     def all_moves(self):
-        pass
+        return NotImplementedError
 
     def __str__(self):
         return "♝" + self.color

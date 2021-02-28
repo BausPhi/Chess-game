@@ -195,3 +195,152 @@ class PossibleMovesKnight(unittest.TestCase):
         knight = field.points[2][2]
         knight.update_possible_moves(field.points)
         self.assertEqual([], knight.moves)
+
+class PossibleMovesBishop(unittest.TestCase):
+    def test_bishop_move_blocked_own_figures_b(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[3][1] = Bishop(color="b", pos=(3, 1))
+        field.points[4][2] = Pawn(color="b", pos=(4, 2))
+        field.points[2][2] = Pawn(color="b", pos=(2, 2))
+        field.points[2][0] = Pawn(color="b", pos=(2, 0))
+        field.points[4][0] = Pawn(color="b", pos=(4, 0))
+        bishop = field.points[3][1]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual([], bishop.moves)
+
+    def test_bishop_move_blocked_own_figures_w(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[3][1] = Bishop(color="w", pos=(3, 1))
+        field.points[4][2] = Pawn(color="w", pos=(4, 2))
+        field.points[2][2] = Pawn(color="w", pos=(2, 2))
+        field.points[2][0] = Pawn(color="w", pos=(2, 0))
+        field.points[4][0] = Pawn(color="w", pos=(4, 0))
+        bishop = field.points[3][1]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual([], bishop.moves)
+
+    def test_bishop_move_blocked_enemy_figures_b(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[3][1] = Bishop(color="b", pos=(3, 1))
+        field.points[4][2] = Pawn(color="w", pos=(4, 2))
+        field.points[2][2] = Pawn(color="w", pos=(2, 2))
+        field.points[2][0] = Pawn(color="w", pos=(2, 0))
+        field.points[4][0] = Pawn(color="w", pos=(4, 0))
+        bishop = field.points[3][1]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(4, len(bishop.moves))
+        self.assertIn({"start": (3, 1), "end": (4, 2)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (2, 0)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (4, 0)}, bishop.moves)
+
+    def test_bishop_move_blocked_enemy_figures_w(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[3][1] = Bishop(color="w", pos=(3, 1))
+        field.points[4][2] = Pawn(color="b", pos=(4, 2))
+        field.points[2][2] = Pawn(color="b", pos=(2, 2))
+        field.points[2][0] = Pawn(color="b", pos=(2, 0))
+        field.points[4][0] = Pawn(color="b", pos=(4, 0))
+        bishop = field.points[3][1]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(4, len(bishop.moves))
+        self.assertIn({"start": (3, 1), "end": (4, 2)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (2, 0)}, bishop.moves)
+        self.assertIn({"start": (3, 1), "end": (4, 0)}, bishop.moves)
+
+    def test_bishop_move_not_blocked_b(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[4][4] = Bishop(color="b", pos=(4, 4))
+        bishop = field.points[4][4]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(13, len(bishop.moves))
+        self.assertIn({"start": (4, 4), "end": (0, 0)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (7, 7)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (7, 1)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (6, 2)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (5, 3)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (3, 5)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (2, 6)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (1, 7)}, bishop.moves)
+
+    def test_bishop_move_not_blocked_w(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[4][4] = Bishop(color="w", pos=(4, 4))
+        bishop = field.points[4][4]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(13, len(bishop.moves))
+        self.assertIn({"start": (4, 4), "end": (0, 0)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (7, 7)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (7, 1)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (6, 2)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (5, 3)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (3, 5)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (2, 6)}, bishop.moves)
+        self.assertIn({"start": (4, 4), "end": (1, 7)}, bishop.moves)
+
+    def test_bishop_move_left_upper_b(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[0][0] = Bishop(color="b", pos=(0, 0))
+        bishop = field.points[0][0]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(7, len(bishop.moves))
+        self.assertIn({"start": (0, 0), "end": (4, 4)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (7, 7)}, bishop.moves)
+
+    def test_bishop_move_left_upper_w(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[0][0] = Bishop(color="w", pos=(0, 0))
+        bishop = field.points[0][0]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(7, len(bishop.moves))
+        self.assertIn({"start": (0, 0), "end": (4, 4)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (0, 0), "end": (7, 7)}, bishop.moves)
+
+    def test_bishop_move_right_lower_b(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[7][7] = Bishop(color="b", pos=(7, 7))
+        bishop = field.points[7][7]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(7, len(bishop.moves))
+        self.assertIn({"start": (7, 7), "end": (4, 4)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (0, 0)}, bishop.moves)
+
+    def test_bishop_move_right_lower_w(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[7][7] = Bishop(color="w", pos=(7, 7))
+        bishop = field.points[7][7]
+        bishop.update_possible_moves(field.points)
+        self.assertEqual(7, len(bishop.moves))
+        self.assertIn({"start": (7, 7), "end": (4, 4)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (1, 1)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (2, 2)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (3, 3)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (5, 5)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (6, 6)}, bishop.moves)
+        self.assertIn({"start": (7, 7), "end": (0, 0)}, bishop.moves)
