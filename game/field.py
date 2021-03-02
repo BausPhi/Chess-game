@@ -41,7 +41,7 @@ class Field:
     moves result in a mate.
     '''
     def field_copy(self):
-        return copy.deepcopy(self.points)
+        return Field(beginning=False, empty=False, field=copy.deepcopy(self.points))
 
     '''
     Checks whether a player is check mate.
@@ -61,7 +61,7 @@ class Field:
                 if figure.name == "King" and figure.color == color:
                     moves = figure.moves
         for move in moves:
-            copy_field = self.field_copy()
+            copy_field = self.field_copy().points
             copy_field[move['end'][0]][move['end'][1]] = copy_field[move['start'][0]][move['start'][1]]
             copy_field[move['start'][0]][move['start'][1]] = Empty(pos=(move['start'][0], move['start'][1]))
             copy_field = Field(beginning=False, empty=False, field=copy_field)
@@ -92,7 +92,7 @@ class Field:
                 if self.points[i][j].name == "King" and self.points[i][j].color == color:
                     king_pos = (i, j)
         for figure in enemy_figures:
-            for move in figure.get_possible_moves(self.points):
+            for move in figure.get_possible_moves(self):
                 if move["end"] == king_pos:
                     return True
         return False
@@ -135,7 +135,7 @@ class Field:
         for row in self.points:
             for figure in row:
                 if not isinstance(figure, Empty):
-                    figure.update_possible_moves(self.points)
+                    figure.update_possible_moves(self)
 
     '''
     Checks if a rochade is possible or not

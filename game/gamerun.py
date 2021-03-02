@@ -6,8 +6,6 @@ if typing.TYPE_CHECKING:
 from game.field import Field
 from game.ai import AI
 
-from PIL import Image, ImageTk
-
 
 class GameRun:
 
@@ -86,8 +84,16 @@ class GameRun:
             pos_start = (tiles[marked_pos][1], self.ui.tiles[marked_pos][2])
             figure = self.field.points[pos_start[0]][pos_start[1]]
             pos_end = (posx, posy)
+            figure_end = self.field.points[pos_end[0]][pos_end[1]]
+            # If the same tile as before is clicked => do nothing
             if pos_start == pos_end:
                 return False
+            # Needed to directly swap the chosen figure instead of dechoosing the last one
+            # and then the choosing another one
+            if figure.color == figure_end.color:
+                self.ui.tiles[marked_pos][0].config(borderwidth=2, relief="flat")
+                self.ui.tiles[posy * 8 + posx][0].config(borderwidth=8, relief="groove")
+            # If the clicked figure has a possible move to the field where you clicked => execute it
             for move in figure.moves:
                 if move["end"] == pos_end:
                     self.field.move_figure(move["start"], move["end"])
@@ -100,26 +106,31 @@ class GameRun:
     Change the turn
     '''
     def after_move(self):
-        if self.field.is_draw(self.turn):
-            return True
-        elif self.field.is_check_mate(self.turn):
-            return True
-        elif self.field.is_mate(self.turn):
-            self.change_gui_after_move()
-            # TODO Mark king that is mate
-            return False
+        # swap turn
+        turn = self.turn
         if self.turn == 1:
             self.turn = 2
         else:
             self.turn = 1
+        # update gui
         self.change_gui_after_move()
+        # check for mate, chec_mate and a draw
+        if self.field.is_draw(turn):
+            return True
+        elif self.field.is_check_mate(turn):
+            print("CHECK MATE")
+            return True
+        elif self.field.is_mate(turn):
+            # TODO Mark king that is mate
+            return False
         return False
 
     '''
-    Updates the UI after the move, changes the label
+    Updates the figures on the UI after the move, changes the label
     that shows the current player's turn etc.
     '''
     def change_gui_after_move(self):     # TODO
+        self.ui.turn_label.config(text="Player " + str(self.turn) + ", it is your turn")
         for tile in self.ui.tiles:
             tile[0].config(borderwidth=2, relief="flat")
         for row in self.field.points:
@@ -162,11 +173,9 @@ class GameRun:
     '''
     def before_move(self, figure):                # TODO
         if self.turn == 1 and figure.color == "w":
-            figure.update_possible_moves(self.field.points)
-            print(figure, figure.moves)
+            figure.update_possible_moves(self.field)
         if self.turn == 2 and figure.color == "b":
-            figure.update_possible_moves(self.field.points)
-            print(figure, figure.moves)
+            figure.update_possible_moves(self.field)
         return
 
 

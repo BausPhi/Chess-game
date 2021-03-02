@@ -8,7 +8,7 @@ class PossibleMovesKing(unittest.TestCase):
         field = Field(beginning=True, empty=False, field=None)
         field.points[3][1] = Empty(pos=(3, 1))
         king = field.points[3][0]
-        king.update_possible_moves(field.points)
+        king.update_possible_moves(field)
         self.assertEqual([{"start": (3, 0), "end": (3, 1)}], king.moves)
 
     def test_king_moves_possible_up_left_right(self):
@@ -17,7 +17,7 @@ class PossibleMovesKing(unittest.TestCase):
         field.points[2][0] = Empty(pos=(2, 0))
         field.points[4][0] = Empty(pos=(4, 0))
         king = field.points[3][0]
-        king.update_possible_moves(field.points)
+        king.update_possible_moves(field)
         self.assertEqual(3, len(king.moves))
         self.assertIn({"start": (3, 0), "end": (3, 1)}, king.moves)
         self.assertIn({"start": (3, 0), "end": (4, 0)}, king.moves)
@@ -35,13 +35,10 @@ class PossibleMovesKing(unittest.TestCase):
         field.points[4][2] = Pawn(color="w", pos=(3, 2))
         field.points[3][1] = King(color="b", pos=(3, 1))
         king = field.points[3][1]
-        king.update_possible_moves(field.points)
-        self.assertEqual(8, len(king.moves))
+        king.update_possible_moves(field)
+        self.assertEqual(5, len(king.moves))
         self.assertIn({"start": (3, 1), "end": (2, 0)}, king.moves)
-        self.assertIn({"start": (3, 1), "end": (3, 0)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (4, 0)}, king.moves)
-        self.assertIn({"start": (3, 1), "end": (2, 1)}, king.moves)
-        self.assertIn({"start": (3, 1), "end": (4, 1)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (2, 2)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (3, 2)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (4, 2)}, king.moves)
@@ -58,7 +55,7 @@ class PossibleMovesKing(unittest.TestCase):
         field.points[4][2] = Empty(pos=(3, 2))
         field.points[3][1] = King(color="b", pos=(3, 1))
         king = field.points[3][1]
-        king.update_possible_moves(field.points)
+        king.update_possible_moves(field)
         self.assertEqual(8, len(king.moves))
         self.assertIn({"start": (3, 1), "end": (2, 0)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (3, 0)}, king.moves)
@@ -75,7 +72,7 @@ class PossibleMovesPawn(unittest.TestCase):
         field.points[3][1] = Pawn(color="b", pos=(3, 1))
         field.points[3][2] = Pawn(color="w", pos=(3, 2))
         pawn = field.points[3][1]
-        pawn.update_possible_moves(field.points)
+        pawn.update_possible_moves(field)
         self.assertEqual([], pawn.moves)
 
     def test_pawn_all_moves_possible_black(self):
@@ -84,7 +81,7 @@ class PossibleMovesPawn(unittest.TestCase):
         field.points[4][2] = Pawn(color="w", pos=(4, 2))
         field.points[2][2] = Pawn(color="w", pos=(2, 2))
         pawn = field.points[3][1]
-        pawn.update_possible_moves(field.points)
+        pawn.update_possible_moves(field)
         self.assertEqual(4, len(pawn.moves))
         self.assertIn({"start": (3, 1), "end": (3, 2)}, pawn.moves)
         self.assertIn({"start": (3, 1), "end": (3, 3)}, pawn.moves)
@@ -96,7 +93,7 @@ class PossibleMovesPawn(unittest.TestCase):
         field.points[3][5] = Pawn(color="b", pos=(3, 5))
         field.points[3][6] = Pawn(color="w", pos=(3, 6))
         pawn = field.points[3][6]
-        pawn.update_possible_moves(field.points)
+        pawn.update_possible_moves(field)
         self.assertEqual([], pawn.moves)
 
     def test_pawn_move_all_possible_white(self):
@@ -105,7 +102,7 @@ class PossibleMovesPawn(unittest.TestCase):
         field.points[4][5] = Pawn(color="b", pos=(4, 5))
         field.points[3][6] = Pawn(color="w", pos=(3, 6))
         pawn = field.points[3][6]
-        pawn.update_possible_moves(field.points)
+        pawn.update_possible_moves(field)
         self.assertEqual(4, len(pawn.moves))
         self.assertIn({"start": (3, 6), "end": (2, 5)}, pawn.moves)
         self.assertIn({"start": (3, 6), "end": (4, 5)}, pawn.moves)
@@ -117,7 +114,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][4] = Knight(color="b", pos=(4, 4))
         knight = field.points[4][4]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(8, len(knight.moves))
         self.assertIn({"start": (4, 4), "end": (2, 3)}, knight.moves)
         self.assertIn({"start": (4, 4), "end": (2, 5)}, knight.moves)
@@ -132,7 +129,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[1][1] = Knight(color="b", pos=(1, 1))
         knight = field.points[1][1]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(4, len(knight.moves))
         self.assertIn({"start": (1, 1), "end": (3, 0)}, knight.moves)
         self.assertIn({"start": (1, 1), "end": (3, 2)}, knight.moves)
@@ -143,7 +140,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[0][0] = Knight(color="b", pos=(0, 0))
         knight = field.points[0][0]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(2, len(knight.moves))
         self.assertIn({"start": (0, 0), "end": (1, 2)}, knight.moves)
         self.assertIn({"start": (0, 0), "end": (2, 1)}, knight.moves)
@@ -152,7 +149,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[6][6] = Knight(color="b", pos=(6, 6))
         knight = field.points[6][6]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(4, len(knight.moves))
         self.assertIn({"start": (6, 6), "end": (4, 7)}, knight.moves)
         self.assertIn({"start": (6, 6), "end": (4, 5)}, knight.moves)
@@ -163,7 +160,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[7][7] = Knight(color="b", pos=(7, 7))
         knight = field.points[7][7]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(2, len(knight.moves))
         self.assertIn({"start": (7, 7), "end": (5, 6)}, knight.moves)
         self.assertIn({"start": (7, 7), "end": (6, 5)}, knight.moves)
@@ -175,7 +172,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field.points[0][2] = Pawn(color="b", pos=(0, 2))
         field.points[1][3] = Pawn(color="b", pos=(1, 3))
         knight = field.points[2][1]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual(3, len(knight.moves))
         self.assertIn({"start": (2, 1), "end": (4, 2)}, knight.moves)
         self.assertIn({"start": (2, 1), "end": (3, 3)}, knight.moves)
@@ -193,7 +190,7 @@ class PossibleMovesKnight(unittest.TestCase):
         field.points[1][0] = Pawn(color="b", pos=(1, 0))
         field.points[4][3] = Pawn(color="b", pos=(4, 3))
         knight = field.points[2][2]
-        knight.update_possible_moves(field.points)
+        knight.update_possible_moves(field)
         self.assertEqual([], knight.moves)
 
 class PossibleMovesBishop(unittest.TestCase):
@@ -205,7 +202,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[2][0] = Pawn(color="b", pos=(2, 0))
         field.points[4][0] = Pawn(color="b", pos=(4, 0))
         bishop = field.points[3][1]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual([], bishop.moves)
 
     def test_bishop_move_blocked_own_figures_w(self):
@@ -216,7 +213,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[2][0] = Pawn(color="w", pos=(2, 0))
         field.points[4][0] = Pawn(color="w", pos=(4, 0))
         bishop = field.points[3][1]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual([], bishop.moves)
 
     def test_bishop_move_blocked_own_figures_b_2(self):
@@ -227,7 +224,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[5][0] = Pawn(color="b", pos=(5, 0))
         field.points[1][0] = Pawn(color="b", pos=(1, 0))
         bishop = field.points[3][2]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(4, len(bishop.moves))
         self.assertIn({"start": (3, 2), "end": (4, 3)}, bishop.moves)
         self.assertIn({"start": (3, 2), "end": (2, 3)}, bishop.moves)
@@ -242,7 +239,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[5][0] = Pawn(color="w", pos=(5, 0))
         field.points[1][0] = Pawn(color="w", pos=(1, 0))
         bishop = field.points[3][2]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(4, len(bishop.moves))
         self.assertIn({"start": (3, 2), "end": (4, 3)}, bishop.moves)
         self.assertIn({"start": (3, 2), "end": (2, 3)}, bishop.moves)
@@ -257,7 +254,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[2][0] = Pawn(color="w", pos=(2, 0))
         field.points[4][0] = Pawn(color="w", pos=(4, 0))
         bishop = field.points[3][1]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(4, len(bishop.moves))
         self.assertIn({"start": (3, 1), "end": (4, 2)}, bishop.moves)
         self.assertIn({"start": (3, 1), "end": (2, 2)}, bishop.moves)
@@ -272,7 +269,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field.points[2][0] = Pawn(color="b", pos=(2, 0))
         field.points[4][0] = Pawn(color="b", pos=(4, 0))
         bishop = field.points[3][1]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(4, len(bishop.moves))
         self.assertIn({"start": (3, 1), "end": (4, 2)}, bishop.moves)
         self.assertIn({"start": (3, 1), "end": (2, 2)}, bishop.moves)
@@ -283,7 +280,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][4] = Bishop(color="b", pos=(4, 4))
         bishop = field.points[4][4]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(13, len(bishop.moves))
         self.assertIn({"start": (4, 4), "end": (0, 0)}, bishop.moves)
         self.assertIn({"start": (4, 4), "end": (1, 1)}, bishop.moves)
@@ -303,7 +300,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][4] = Bishop(color="w", pos=(4, 4))
         bishop = field.points[4][4]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(13, len(bishop.moves))
         self.assertIn({"start": (4, 4), "end": (0, 0)}, bishop.moves)
         self.assertIn({"start": (4, 4), "end": (1, 1)}, bishop.moves)
@@ -323,7 +320,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[0][0] = Bishop(color="b", pos=(0, 0))
         bishop = field.points[0][0]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(7, len(bishop.moves))
         self.assertIn({"start": (0, 0), "end": (4, 4)}, bishop.moves)
         self.assertIn({"start": (0, 0), "end": (1, 1)}, bishop.moves)
@@ -337,7 +334,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[0][0] = Bishop(color="w", pos=(0, 0))
         bishop = field.points[0][0]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(7, len(bishop.moves))
         self.assertIn({"start": (0, 0), "end": (4, 4)}, bishop.moves)
         self.assertIn({"start": (0, 0), "end": (1, 1)}, bishop.moves)
@@ -351,7 +348,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[7][7] = Bishop(color="b", pos=(7, 7))
         bishop = field.points[7][7]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(7, len(bishop.moves))
         self.assertIn({"start": (7, 7), "end": (4, 4)}, bishop.moves)
         self.assertIn({"start": (7, 7), "end": (1, 1)}, bishop.moves)
@@ -365,7 +362,7 @@ class PossibleMovesBishop(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[7][7] = Bishop(color="w", pos=(7, 7))
         bishop = field.points[7][7]
-        bishop.update_possible_moves(field.points)
+        bishop.update_possible_moves(field)
         self.assertEqual(7, len(bishop.moves))
         self.assertIn({"start": (7, 7), "end": (4, 4)}, bishop.moves)
         self.assertIn({"start": (7, 7), "end": (1, 1)}, bishop.moves)
@@ -384,7 +381,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[4][1] = Pawn(color="b", pos=(4, 1))
         field.points[2][1] = Pawn(color="b", pos=(2, 1))
         rook = field.points[3][1]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual([], rook.moves)
 
     def test_rook_move_blocked_own_figures_w(self):
@@ -395,7 +392,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[4][1] = Pawn(color="w", pos=(4, 1))
         field.points[2][1] = Pawn(color="w", pos=(2, 1))
         rook = field.points[3][1]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual([], rook.moves)
 
     def test_rook_move_blocked_own_figures_b_2(self):
@@ -406,7 +403,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[5][2] = Pawn(color="b", pos=(5, 2))
         field.points[1][2] = Pawn(color="b", pos=(1, 2))
         rook = field.points[3][2]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(4, len(rook.moves))
         self.assertIn({"start": (3, 2), "end": (3, 1)}, rook.moves)
         self.assertIn({"start": (3, 2), "end": (3, 3)}, rook.moves)
@@ -421,7 +418,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[5][2] = Pawn(color="w", pos=(5, 2))
         field.points[1][2] = Pawn(color="w", pos=(1, 2))
         rook = field.points[3][2]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(4, len(rook.moves))
         self.assertIn({"start": (3, 2), "end": (3, 1)}, rook.moves)
         self.assertIn({"start": (3, 2), "end": (3, 3)}, rook.moves)
@@ -436,7 +433,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[4][1] = Pawn(color="w", pos=(4, 1))
         field.points[2][1] = Pawn(color="w", pos=(2, 1))
         rook = field.points[3][1]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(4, len(rook.moves))
         self.assertIn({"start": (3, 1), "end": (3, 2)}, rook.moves)
         self.assertIn({"start": (3, 1), "end": (3, 0)}, rook.moves)
@@ -451,7 +448,7 @@ class PossibleMovesRook(unittest.TestCase):
         field.points[4][1] = Pawn(color="b", pos=(4, 1))
         field.points[2][1] = Pawn(color="b", pos=(2, 1))
         rook = field.points[3][1]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(4, len(rook.moves))
         self.assertIn({"start": (3, 1), "end": (3, 2)}, rook.moves)
         self.assertIn({"start": (3, 1), "end": (3, 0)}, rook.moves)
@@ -462,7 +459,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][4] = Rook(color="b", pos=(4, 4))
         rook = field.points[4][4]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (4, 4), "end": (4, 0)}, rook.moves)
         self.assertIn({"start": (4, 4), "end": (4, 1)}, rook.moves)
@@ -483,7 +480,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][4] = Rook(color="w", pos=(4, 4))
         rook = field.points[4][4]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (4, 4), "end": (4, 0)}, rook.moves)
         self.assertIn({"start": (4, 4), "end": (4, 1)}, rook.moves)
@@ -504,7 +501,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[0][0] = Rook(color="b", pos=(0, 0))
         rook = field.points[0][0]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (0, 0), "end": (0, 1)}, rook.moves)
         self.assertIn({"start": (0, 0), "end": (0, 2)}, rook.moves)
@@ -525,7 +522,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[0][0] = Rook(color="w", pos=(0, 0))
         rook = field.points[0][0]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (0, 0), "end": (0, 1)}, rook.moves)
         self.assertIn({"start": (0, 0), "end": (0, 2)}, rook.moves)
@@ -546,7 +543,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[7][7] = Rook(color="b", pos=(7, 7))
         rook = field.points[7][7]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (7, 7), "end": (7, 6)}, rook.moves)
         self.assertIn({"start": (7, 7), "end": (7, 5)}, rook.moves)
@@ -567,7 +564,7 @@ class PossibleMovesRook(unittest.TestCase):
         field = Field(beginning=False, empty=True, field=None)
         field.points[7][7] = Rook(color="w", pos=(7, 7))
         rook = field.points[7][7]
-        rook.update_possible_moves(field.points)
+        rook.update_possible_moves(field)
         self.assertEqual(14, len(rook.moves))
         self.assertIn({"start": (7, 7), "end": (7, 6)}, rook.moves)
         self.assertIn({"start": (7, 7), "end": (7, 5)}, rook.moves)
@@ -597,7 +594,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[4][2] = Pawn(color="b", pos=(4, 2))
         field.points[2][2] = Pawn(color="b", pos=(2, 2))
         queen = field.points[3][1]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual([], queen.moves)
 
     def test_queen_blocked_own_figures_w(self):
@@ -612,7 +609,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[4][2] = Pawn(color="w", pos=(4, 2))
         field.points[2][2] = Pawn(color="w", pos=(2, 2))
         queen = field.points[3][1]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual([], queen.moves)
 
     def test_queen_blocked_own_figures_b_2(self):
@@ -627,7 +624,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][5] = Pawn(color="b", pos=(6, 5))
         field.points[6][7] = Pawn(color="b", pos=(6, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(8, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)
@@ -650,7 +647,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][5] = Pawn(color="w", pos=(6, 5))
         field.points[6][7] = Pawn(color="w", pos=(6, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(8, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)
@@ -669,7 +666,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[4][7] = Pawn(color="b", pos=(4, 7))
         field.points[6][5] = Pawn(color="b", pos=(6, 5))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(15, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)
@@ -695,7 +692,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[4][7] = Pawn(color="w", pos=(4, 7))
         field.points[6][5] = Pawn(color="w", pos=(6, 5))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(15, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)
@@ -721,7 +718,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][3] = Pawn(color="b", pos=(4, 3))
         field.points[6][7] = Pawn(color="b", pos=(4, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(18, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (4, 0)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (4, 1)}, queen.moves)
@@ -750,7 +747,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][3] = Pawn(color="w", pos=(4, 3))
         field.points[6][7] = Pawn(color="w", pos=(4, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(18, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (4, 0)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (4, 1)}, queen.moves)
@@ -783,7 +780,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][5] = Pawn(color="w", pos=(6, 5))
         field.points[6][7] = Pawn(color="w", pos=(6, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(16, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)
@@ -814,7 +811,7 @@ class PossibleMovesQueen(unittest.TestCase):
         field.points[6][5] = Pawn(color="b", pos=(6, 5))
         field.points[6][7] = Pawn(color="b", pos=(6, 7))
         queen = field.points[4][5]
-        queen.update_possible_moves(field.points)
+        queen.update_possible_moves(field)
         self.assertEqual(16, len(queen.moves))
         self.assertIn({"start": (4, 5), "end": (3, 4)}, queen.moves)
         self.assertIn({"start": (4, 5), "end": (3, 5)}, queen.moves)

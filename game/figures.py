@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+import copy
+
 
 class Figure(ABC):
 
@@ -52,18 +54,29 @@ class King(Figure):
         super().__init__("King", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO check for mate
+    def update_possible_moves(self, field):                   # TODO ROCHADE + TEST
         self.moves = []
         moves = self.all_moves()
         for move in moves:
-            if field[move[0]][move[1]].color != self.color:
+            if field.points[move[0]][move[1]].color != self.color:
                 self.moves.append({"start": self.position, "end": move})
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         filtered_moves = []
         moves = self.all_moves()
         for move in moves:
-            if field[move[0]][move[1]].color != self.color:
+            if field.points[move[0]][move[1]].color != self.color:
                 filtered_moves.append({"start": self.position, "end": move})
         return filtered_moves
 
@@ -89,7 +102,7 @@ class Queen(Figure):
         super().__init__("Queen", pos, color, [])
         self.rochade = None
 
-    def update_possible_moves(self, field):                   # TODO check for mate
+    def update_possible_moves(self, field):                   # TODO TEST
         x = self.position[0]
         y = self.position[1]
         possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
@@ -119,6 +132,17 @@ class Queen(Figure):
             temp_moves, possible_up = self.possible_moves_up(field, x, y, i, possible_up)
             for move in temp_moves:
                 self.moves.append(move)
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         moves = []
@@ -160,7 +184,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y - i >= 0:
-                tile = field[x - i][y - i]
+                tile = field.points[x - i][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y - i)})
                 elif tile.color != self.color:
@@ -174,7 +198,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y + i < 8:
-                tile = field[x - i][y + i]
+                tile = field.points[x - i][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y + i)})
                 elif tile.color != self.color:
@@ -188,7 +212,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x + i < 8 and y - i >= 0:
-                tile = field[x + i][y - i]
+                tile = field.points[x + i][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y - i)})
                 elif tile.color != self.color:
@@ -202,7 +226,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x + i < 8 and y + i < 8:
-                tile = field[x + i][y + i]
+                tile = field.points[x + i][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y + i)})
                 elif tile.color != self.color:
@@ -216,7 +240,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y >= 0:
-                tile = field[x - i][y]
+                tile = field.points[x - i][y]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y)})
                 elif tile.color != self.color:
@@ -230,7 +254,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x >= 0 and y + i < 8:
-                tile = field[x][y + i]
+                tile = field.points[x][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x, y + i)})
                 elif tile.color != self.color:
@@ -244,7 +268,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x + i < 8 and y >= 0:
-                tile = field[x + i][y]
+                tile = field.points[x + i][y]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y)})
                 elif tile.color != self.color:
@@ -258,7 +282,7 @@ class Queen(Figure):
         moves = []
         if finished:
             if x < 8 and y - i >= 0:
-                tile = field[x][y - i]
+                tile = field.points[x][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x, y - i)})
                 elif tile.color != self.color:
@@ -278,7 +302,7 @@ class Rook(Figure):
         super().__init__("Rook", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO check for mate and rochade
+    def update_possible_moves(self, field):                   # TODO ROCHADE + TEST
         x = self.position[0]
         y = self.position[1]
         possible_left, possible_down, possible_right, possible_up = True, True, True, True
@@ -295,6 +319,17 @@ class Rook(Figure):
             temp_moves, possible_up = self.possible_moves_up(field, x, y, i, possible_up)
             for move in temp_moves:
                 self.moves.append(move)
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         moves = []
@@ -323,7 +358,7 @@ class Rook(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y >= 0:
-                tile = field[x - i][y]
+                tile = field.points[x - i][y]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y)})
                 elif tile.color != self.color:
@@ -337,7 +372,7 @@ class Rook(Figure):
         moves = []
         if finished:
             if x >= 0 and y + i < 8:
-                tile = field[x][y + i]
+                tile = field.points[x][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x, y + i)})
                 elif tile.color != self.color:
@@ -351,7 +386,7 @@ class Rook(Figure):
         moves = []
         if finished:
             if x + i < 8 and y >= 0:
-                tile = field[x + i][y]
+                tile = field.points[x + i][y]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y)})
                 elif tile.color != self.color:
@@ -365,7 +400,7 @@ class Rook(Figure):
         moves = []
         if finished:
             if x < 8 and y - i >= 0:
-                tile = field[x][y - i]
+                tile = field.points[x][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x, y - i)})
                 elif tile.color != self.color:
@@ -385,19 +420,30 @@ class Knight(Figure):
         super().__init__("Knight", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO check for mate
+    def update_possible_moves(self, field):                   # TODO TEST
         self.moves = []
         moves = self.all_moves()
         for move in moves:
-            tile = field[move[0]][move[1]]
+            tile = field.points[move[0]][move[1]]
             if isinstance(tile, Empty) or tile.color == other_color(self.color):
                 self.moves.append({"start": self.position, "end": move})
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         filtered_moves = []
         moves = self.all_moves()
         for move in moves:
-            tile = field[move[0]][move[1]]
+            tile = field.points[move[0]][move[1]]
             if isinstance(tile, Empty) or tile.color == other_color(self.color):
                 filtered_moves.append({"start": self.position, "end": move})
         return filtered_moves
@@ -426,7 +472,7 @@ class Bishop(Figure):
         super().__init__("Bishop", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO check for mate
+    def update_possible_moves(self, field):                   # TODO TEST
         x = self.position[0]
         y = self.position[1]
         possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
@@ -443,6 +489,17 @@ class Bishop(Figure):
             temp_moves, possible_right_down = self.possible_moves_right_down(field, x, y, i, possible_right_down)
             for move in temp_moves:
                 self.moves.append(move)
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         moves = []
@@ -471,7 +528,7 @@ class Bishop(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y - i >= 0:
-                tile = field[x - i][y - i]
+                tile = field.points[x - i][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y - i)})
                 elif tile.color != self.color:
@@ -485,7 +542,7 @@ class Bishop(Figure):
         moves = []
         if finished:
             if x - i >= 0 and y + i < 8:
-                tile = field[x - i][y + i]
+                tile = field.points[x - i][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x - i, y + i)})
                 elif tile.color != self.color:
@@ -499,7 +556,7 @@ class Bishop(Figure):
         moves = []
         if finished:
             if x + i < 8 and y - i >= 0:
-                tile = field[x + i][y - i]
+                tile = field.points[x + i][y - i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y - i)})
                 elif tile.color != self.color:
@@ -513,7 +570,7 @@ class Bishop(Figure):
         moves = []
         if finished:
             if x + i < 8 and y + i < 8:
-                tile = field[x + i][y + i]
+                tile = field.points[x + i][y + i]
                 if isinstance(tile, Empty):
                     moves.append({"start": self.position, "end": (x + i, y + i)})
                 elif tile.color != self.color:
@@ -533,27 +590,38 @@ class Pawn(Figure):
         super().__init__("Pawn", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO check for mate
+    def update_possible_moves(self, field):                   # TODO TEST
         self.moves = []
         moves = self.all_moves()
         startx, starty = self.position[0], self.position[1]
         for move in moves:
             endx, endy = move[0], move[1]
             if startx != endx and starty != endy:
-                if field[endx][endy].color == other_color(self.color):
+                if field.points[endx][endy].color == other_color(self.color):
                     self.moves.append({"start": self.position, "end": move})
             elif starty + 2 == endy:
-                if isinstance(field[startx][starty + 1], Empty) and isinstance(field[startx][starty + 2], Empty):
+                if isinstance(field.points[startx][starty + 1], Empty) and isinstance(field.points[startx][starty + 2], Empty):
                     self.moves.append({"start": self.position, "end": move})
             elif starty - 2 == endy:
-                if isinstance(field[startx][starty - 1], Empty) and isinstance(field[startx][starty - 2], Empty):
+                if isinstance(field.points[startx][starty - 1], Empty) and isinstance(field.points[startx][starty - 2], Empty):
                     self.moves.append({"start": self.position, "end": move})
             elif starty + 1 == endy:
-                if isinstance(field[startx][starty + 1], Empty):
+                if isinstance(field.points[startx][starty + 1], Empty):
                     self.moves.append({"start": self.position, "end": move})
             elif starty - 1 == endy:
-                if isinstance(field[startx][starty - 1], Empty):
+                if isinstance(field.points[startx][starty - 1], Empty):
                     self.moves.append({"start": self.position, "end": move})
+        moves = copy.deepcopy(self.moves)
+        self.moves = []
+        for move in moves:
+            field_copy = field.field_copy()
+            field_copy.move_figure(move["start"], move["end"])
+            if self.color == "w":
+                if not field_copy.is_mate(2):
+                    self.moves.append(move)
+            else:
+                if not field_copy.is_mate(1):
+                    self.moves.append(move)
 
     def get_possible_moves(self, field):
         filtered_moves = []
@@ -562,19 +630,19 @@ class Pawn(Figure):
         for move in moves:
             endx, endy = move[0], move[1]
             if startx != endx and starty != endy:
-                if field[endx][endy].color == other_color(self.color):
+                if field.points[endx][endy].color == other_color(self.color):
                     filtered_moves.append({"start": self.position, "end": move})
             elif starty + 2 == endy:
-                if isinstance(field[startx][starty + 1], Empty) and isinstance(field[startx][starty + 2], Empty):
+                if isinstance(field.points[startx][starty + 1], Empty) and isinstance(field.points[startx][starty + 2], Empty):
                     filtered_moves.append({"start": self.position, "end": move})
             elif starty - 2 == endy:
-                if isinstance(field[startx][starty - 1], Empty) and isinstance(field[startx][starty - 2], Empty):
+                if isinstance(field.points[startx][starty - 1], Empty) and isinstance(field.points[startx][starty - 2], Empty):
                     filtered_moves.append({"start": self.position, "end": move})
             elif starty + 1 == endy:
-                if isinstance(field[startx][starty + 1], Empty):
+                if isinstance(field.points[startx][starty + 1], Empty):
                     filtered_moves.append({"start": self.position, "end": move})
             elif starty - 1 == endy:
-                if isinstance(field[startx][starty - 1], Empty):
+                if isinstance(field.points[startx][starty - 1], Empty):
                     filtered_moves.append({"start": self.position, "end": move})
         return filtered_moves
 

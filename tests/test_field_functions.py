@@ -89,6 +89,31 @@ class Mate(unittest.TestCase):
         field.points[4][2] = Queen(color="w", pos=(4, 2))
         self.assertEqual(False, field.is_mate(1))
 
+    def test_mate_4(self):
+        field = Field(beginning=True, empty=False, field=None)
+        field.points[2][1] = Empty(pos=(2, 1))
+        field.points[4][1] = Empty(pos=(4, 1))
+        field.points[2][3] = Pawn(color="b", pos=(2, 3))
+        field.points[4][3] = Pawn(color="b", pos=(4, 3))
+        field.points[3][4] = Pawn(color="w", pos=(3, 4))
+        field.points[6][3] = Bishop(color="w", pos=(6, 3))
+        field.points[3][6] = Empty(pos=(3, 6))
+        field.points[2][7] = Empty(pos=(2, 7))
+        self.assertEqual(True, field.is_mate(1))
+
+    def test_not_mate_1(self):
+        field = Field(beginning=True, empty=False, field=None)
+        field.points[4][1] = Empty(pos=(4, 1))
+        field.points[2][3] = Pawn(color="b", pos=(2, 3))
+        field.points[4][3] = Pawn(color="b", pos=(4, 3))
+        field.points[3][4] = Pawn(color="w", pos=(3, 4))
+        field.points[6][3] = Bishop(color="w", pos=(6, 3))
+        field.points[3][6] = Empty(pos=(3, 6))
+        field.points[2][7] = Empty(pos=(2, 7))
+        field.points[3][0] = Empty(pos=(3, 0))
+        field.points[2][1] = King(color="b", pos=(2, 1))
+        self.assertEqual(False, field.is_mate(1))
+
 '''class Draw(unittest.TestCase):
     def test_draw_1(self):
         field = Field(beginning=False, empty=True, field=None)

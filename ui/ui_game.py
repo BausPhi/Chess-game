@@ -107,10 +107,7 @@ class Game:
         pass
 
     def on_click(self, event):
-        status = self.game.execute_move(event.widget, self.tiles)
-        # game over
-        if status is None:
-            return None
-        if status is True:
-            pass    # finish game
-        return status
+        if self.game.execute_move(event.widget, self.tiles):
+            return
+        else:
+            return
