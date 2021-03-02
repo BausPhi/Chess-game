@@ -71,6 +71,49 @@ class King(Figure):
             else:
                 if not field_copy.is_mate(1):
                     self.moves.append(move)
+        # check for rochade
+        self.check_rochade(field)
+
+    def check_rochade(self, field):
+        if self.rochade is True:
+            possible_towers = []
+            for row in field.points:
+                for figure in row:
+                    if figure.name == "Rook" and figure.color == self.color and figure.rochade is True:
+                        possible_towers.append(figure)
+            for tower in possible_towers:
+                if self.color == "w":
+                    y = 7
+                else:
+                    y = 0
+                if tower.position == (0, y):
+                    add_rochade = True
+                    for i in range(1, 3):
+                        copy_field = field.field_copy()
+                        if not isinstance(copy_field.points[i][y], Empty):
+                            add_rochade = False
+                            break
+                        copy_field.move_figure((3, y), (i, y))
+                        if copy_field.is_mate(2):
+                            add_rochade = False
+                            break
+                    if add_rochade:
+                        self.moves.append({"start": self.position, "end": (1, y)})
+                        tower.moves.append({"start": tower.position, "end": (2, y)})
+                else:
+                    add_rochade = True
+                    for i in range(4, 6):
+                        copy_field = field.field_copy()
+                        if not isinstance(copy_field.points[i][y], Empty):
+                            add_rochade = False
+                            break
+                        copy_field.move_figure((3, y), (i, y))
+                        if copy_field.is_mate(2):
+                            add_rochade = False
+                            break
+                    if add_rochade:
+                        self.moves.append({"start": self.position, "end": (5, y)})
+                        tower.moves.append({"start": tower.position, "end": (4, y)})
 
     def get_possible_moves(self, field):
         filtered_moves = []
@@ -302,7 +345,7 @@ class Rook(Figure):
         super().__init__("Rook", pos, color, [])
         self.rochade = True
 
-    def update_possible_moves(self, field):                   # TODO ROCHADE + TEST
+    def update_possible_moves(self, field):                   # TODO TEST
         x = self.position[0]
         y = self.position[1]
         possible_left, possible_down, possible_right, possible_up = True, True, True, True
