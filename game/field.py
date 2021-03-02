@@ -33,6 +33,8 @@ class Field:
         self.points[end[0]][end[1]] = self.points[start[0]][start[1]]
         self.points[end[0]][end[1]].position = (end[0], end[1])
         self.points[start[0]][start[1]] = Empty(pos=(start[0], start[1]))
+        if self.points[end[0]][end[1]].name == "King" or self.points[end[0]][end[1]].name == "Rook":
+            self.points[end[0]][end[1]].rochade = False
         return
 
     '''
