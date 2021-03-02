@@ -6,6 +6,8 @@ if typing.TYPE_CHECKING:
 from game.field import Field
 from game.ai import AI
 
+from PIL import Image, ImageTk
+
 
 class GameRun:
 
@@ -48,12 +50,14 @@ class GameRun:
         border_value = str(clicked_tile.cget("borderwidth"))
         if self.turn == 1 and self.field.points[posx][posy].color == "w":
             if marked == 0:
+                self.before_move(self.field.points[posx][posy])
                 if border_value == "2":
                     clicked_tile.config(borderwidth=8, relief="groove")
             if border_value == "8":
                 clicked_tile.config(borderwidth=2, relief="flat")
         elif self.turn == 2 and self.field.points[posx][posy].color == "b":
             if marked == 0:
+                self.before_move(self.field.points[posx][posy])
                 if border_value == "2":
                     clicked_tile.config(borderwidth=8, relief="groove")
             if border_value == "8":
@@ -75,21 +79,95 @@ class GameRun:
 
     '''
     Perform the clicked move if it is valid
+    Returns if game is over
     '''
-    def perform_move(self, marked, marked_pos, tiles, posx, posy):       # TODO
+    def perform_move(self, marked, marked_pos, tiles, posx, posy):
         if marked == 1:
             pos_start = (tiles[marked_pos][1], self.ui.tiles[marked_pos][2])
+            figure = self.field.points[pos_start[0]][pos_start[1]]
             pos_end = (posx, posy)
-            # if the positions are the same => same tile was clicked again
             if pos_start == pos_end:
-                return None
+                return False
+            for move in figure.moves:
+                if move["end"] == pos_end:
+                    self.field.move_figure(move["start"], move["end"])
+                    return self.after_move()
+            return False
 
     '''
     Check for check mate, mate and a draw
     Also check if a pawn reched the end
+    Change the turn
     '''
-    def post_move(self):                                                 # TODO
-        pass
+    def after_move(self):
+        if self.field.is_draw(self.turn):
+            return True
+        elif self.field.is_check_mate(self.turn):
+            return True
+        elif self.field.is_mate(self.turn):
+            self.change_gui_after_move()
+            # TODO Mark king that is mate
+            return False
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
+        self.change_gui_after_move()
+        return False
+
+    '''
+    Updates the UI after the move, changes the label
+    that shows the current player's turn etc.
+    '''
+    def change_gui_after_move(self):     # TODO
+        for tile in self.ui.tiles:
+            tile[0].config(borderwidth=2, relief="flat")
+        for row in self.field.points:
+            for figure in row:
+                pos = figure.position
+                pos_tile = pos[1] * 8 + pos[0]
+                if figure.color == "w":
+                    if figure.name == "King":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["king_w"])
+                    if figure.name == "Pawn":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["pawn_w"])
+                    if figure.name == "Queen":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["queen_w"])
+                    if figure.name == "Rook":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["rook_w"])
+                    if figure.name == "Knight":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["knight_w"])
+                    if figure.name == "Bishop":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["bishop_w"])
+                elif figure.color == "b":
+                    if figure.name == "King":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["king"])
+                    if figure.name == "Pawn":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["pawn"])
+                    if figure.name == "Queen":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["queen"])
+                    if figure.name == "Rook":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["rook"])
+                    if figure.name == "Knight":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["knight"])
+                    if figure.name == "Bishop":
+                        self.ui.tiles[pos_tile][0].config(image=self.ui.images["bishop"])
+                else:
+                    self.ui.tiles[pos_tile][0].config(image='')
+
+    '''
+    Updates the new possible moves for a player
+    and marks it on the field.
+    Is called at the beginning of a player's turn
+    '''
+    def before_move(self, figure):                # TODO
+        if self.turn == 1 and figure.color == "w":
+            figure.update_possible_moves(self.field.points)
+            print(figure, figure.moves)
+        if self.turn == 2 and figure.color == "b":
+            figure.update_possible_moves(self.field.points)
+            print(figure, figure.moves)
+        return
 
 
 '''

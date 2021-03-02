@@ -70,32 +70,32 @@ class Game:
                 self.frames[8*j+i].place(x=i*100, y=j*100)
                 self.tiles[8*j+i][0].pack(fill=BOTH, expand=True)
                 self.tiles[8*j+i][0].place(x=0, y=0, width=100, height=100)
-                if i == 1:
-                    self.tiles[8*i+j][0].config(image=self.images['pawn'])
-                if i == 6:
-                    self.tiles[8*i+j][0].config(image=self.images['pawn_w'])
-                if i == 0:
-                    if j == 0 or j == 7:
-                        self.tiles[8*i+j][0].config(image=self.images['rook'])
-                    if j == 1 or j == 6:
-                        self.tiles[8*i+j][0].config(image=self.images['knight'])
-                    if j == 2 or j == 5:
-                        self.tiles[8*i+j][0].config(image=self.images['bishop'])
-                    if j == 3:
-                        self.tiles[8*i+j][0].config(image=self.images['king'])
-                    if j == 4:
-                        self.tiles[8*i+j][0].config(image=self.images['queen'])
-                if i == 7:
-                    if j == 0 or j == 7:
-                        self.tiles[8*i+j][0].config(image=self.images['rook_w'])
-                    if j == 1 or j == 6:
-                        self.tiles[8*i+j][0].config(image=self.images['knight_w'])
-                    if j == 2 or j == 5:
-                        self.tiles[8*i+j][0].config(image=self.images['bishop_w'])
-                    if j == 3:
-                        self.tiles[8*i+j][0].config(image=self.images['king_w'])
-                    if j == 4:
-                        self.tiles[8*i+j][0].config(image=self.images['queen_w'])
+                if j == 1:
+                    self.tiles[8*j+i][0].config(image=self.images['pawn'])
+                if j == 6:
+                    self.tiles[8*j+i][0].config(image=self.images['pawn_w'])
+                if j == 0:
+                    if i == 0 or i == 7:
+                        self.tiles[8*j+i][0].config(image=self.images['rook'])
+                    if i == 1 or i == 6:
+                        self.tiles[8*j+i][0].config(image=self.images['knight'])
+                    if i == 2 or i == 5:
+                        self.tiles[8*j+i][0].config(image=self.images['bishop'])
+                    if i == 3:
+                        self.tiles[8*j+i][0].config(image=self.images['king'])
+                    if i == 4:
+                        self.tiles[8*j+i][0].config(image=self.images['queen'])
+                if j == 7:
+                    if i == 0 or i == 7:
+                        self.tiles[8*j+i][0].config(image=self.images['rook_w'])
+                    if i == 1 or i == 6:
+                        self.tiles[8*j+i][0].config(image=self.images['knight_w'])
+                    if i == 2 or i == 5:
+                        self.tiles[8*j+i][0].config(image=self.images['bishop_w'])
+                    if i == 3:
+                        self.tiles[8*j+i][0].config(image=self.images['king_w'])
+                    if i == 4:
+                        self.tiles[8*j+i][0].config(image=self.images['queen_w'])
         self.turn_frame.pack()
         self.turn_frame.place(x=300, y=825)
         self.turn_label.pack(fill=BOTH, expand=True)
@@ -109,6 +109,8 @@ class Game:
     def on_click(self, event):
         status = self.game.execute_move(event.widget, self.tiles)
         # game over
-        if status == "GAME OVER!":
+        if status is None:
+            return None
+        if status is True:
             pass    # finish game
         return status

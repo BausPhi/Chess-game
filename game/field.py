@@ -1,3 +1,5 @@
+import math
+
 from game.figures import *
 
 import copy
@@ -41,20 +43,18 @@ class Field:
     def field_copy(self):
         return copy.deepcopy(self.points)
 
-    def king_in_danger(self, player):        # TODO
-        pass
-
     '''
     Checks whether a player is check mate.
-    If yes, the game is over
+    If yes, the game is over (always takes the number
+    of the player that would do the next turn)
     '''
-    def is_check_mate(self, player):
-        if not self.king_in_danger(player):
+    def is_check_mate(self, player):      # TODO TEST
+        if not self.is_mate(player):
             return False
         if player == 1:
-            color = "w"
-        else:
             color = "b"
+        else:
+            color = "w"
         moves = []
         for row in self.points:
             for figure in row:
@@ -70,16 +70,17 @@ class Field:
         return True
 
     '''
-    Checks whether a player is check mate.
-    If yes, the game is over
+    Checks whether a player is mate.
+    If yes, the game is over (always takes the number
+    of the player that would do the next turn)
     '''
-    def is_mate(self, player):               # TODO
+    def is_mate(self, player):               # TODO TEST
         if player == 1:
-            enemy_color = "b"
-            color = "w"
-        else:
             enemy_color = "w"
             color = "b"
+        else:
+            enemy_color = "b"
+            color = "w"
         enemy_figures = []
         for row in self.points:
             for figure in row:
@@ -91,25 +92,50 @@ class Field:
                 if self.points[i][j].name == "King" and self.points[i][j].color == color:
                     king_pos = (i, j)
         for figure in enemy_figures:
-            for move in figure.get_possible_moves(figure.get_position(self.points)):
+            for move in figure.get_possible_moves(self.points):
                 if move["end"] == king_pos:
                     return True
         return False
-        pass
 
     '''
     Checks whether the game ended in a draw
+    (always takes the number of the player 
+    that would do the next turn)
     '''
-    def is_draw(self):               # TODO
-        pass
+    def is_draw(self, player):               # TODO FIX IT
+        return False
+        '''if self.is_mate(player):
+            return False
+        if player == 1:
+            color = "b"
+        else:
+            color = "w"
+        moves = []
+        for row in self.points:
+            for figure in row:
+                if figure.name == "King" and figure.color == color:
+                    moves = figure.moves
+        if not moves:
+            return False
+        for move in moves:
+            copy_field = self.field_copy()
+            copy_field[move['end'][0]][move['end'][1]] = copy_field[move['start'][0]][move['start'][1]]
+            copy_field[move['start'][0]][move['start'][1]] = Empty(pos=(move['start'][0], move['start'][1]))
+            copy_field = Field(beginning=False, empty=False, field=copy_field)
+            if not copy_field.is_mate(player):
+                return False
+        return True'''
 
     '''
     Calculates every possible move for every figure and saves
     them in moves field of the figure
     It is only done for the figures of the player whose turn it is
     '''
-    def update_all_possible_moves(self, turn):     # TODO
-        pass
+    def update_all_possible_moves(self, turn):   # TODO TEST
+        for row in self.points:
+            for figure in row:
+                if not isinstance(figure, Empty):
+                    figure.update_possible_moves(self.points)
 
     '''
     Checks if a rochade is possible or not
