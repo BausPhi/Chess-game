@@ -91,8 +91,7 @@ class GameRun:
                     if self.ui.tiles[i][0].cget("borderwidth") == 4:
                         self.ui.tiles[i][0].config(borderwidth=2, relief="flat")
                 return False
-            # Needed to directly swap the chosen figure instead of dechoosing the last one
-            # and then the choosing another one
+            # Unmarks the current figure and marks the new figure
             if figure.color == figure_end.color:
                 self.ui.tiles[marked_pos][0].config(borderwidth=2, relief="flat")
                 self.ui.tiles[posy * 8 + posx][0].config(borderwidth=8, relief="groove")
@@ -173,9 +172,13 @@ class GameRun:
     '''
     Updates the new possible moves for a player
     and marks it on the field.
-    Is called at the beginning of a player's turn
+    Is called when the player marks a figure that he would
+    like to move
     '''
     def before_move(self, figure):                # TODO
+        for i in range(64):
+            if self.ui.tiles[i][0].cget("borderwidth") == 4:
+                self.ui.tiles[i][0].config(borderwidth=2, relief="flat")
         if self.turn == 1 and figure.color == "w":
             figure.update_possible_moves(self.field)
             for move in figure.moves:
