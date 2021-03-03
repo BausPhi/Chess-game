@@ -66,10 +66,6 @@ class PossibleMovesKing(unittest.TestCase):
         self.assertIn({"start": (3, 1), "end": (3, 2)}, king.moves)
         self.assertIn({"start": (3, 1), "end": (4, 2)}, king.moves)
 
-#    def test_king_move_rochade(self):
-#        field = Field(beginning=False, empty=True, field=None)
-#        field.points[]
-
 class PossibleMovesPawn(unittest.TestCase):
     def test_pawn_move_blocked_black(self):
         field = Field(beginning=False, empty=True, field=None)

@@ -124,6 +124,14 @@ class GameRun:
             print("CHECK MATE")
             return True
         elif self.field.is_mate(turn):
+            for row in self.field.points:
+                for figure in row:
+                    if self.turn == 1:
+                        if figure.name == "King" and figure.color == "w":
+                            self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_w_red"])
+                    else:
+                        if figure.name == "King" and figure.color == "b":
+                            self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_red"])
             # TODO Mark king that is mate
             return False
         return False

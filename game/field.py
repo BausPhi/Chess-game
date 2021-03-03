@@ -1,5 +1,3 @@
-import math
-
 from game.figures import *
 
 import copy
@@ -71,6 +69,7 @@ class Field:
         for row in self.points:
             for figure in row:
                 if figure.name == "King" and figure.color == color:
+                    figure.update_possible_moves(self)
                     moves = figure.moves
         for move in moves:
             copy_field = self.field_copy().points
@@ -137,17 +136,6 @@ class Field:
             if not copy_field.is_mate(player):
                 return False
         return True'''
-
-    '''
-    Calculates every possible move for every figure and saves
-    them in moves field of the figure
-    It is only done for the figures of the player whose turn it is
-    '''
-    def update_all_possible_moves(self, turn):   # TODO TEST
-        for row in self.points:
-            for figure in row:
-                if not isinstance(figure, Empty):
-                    figure.update_possible_moves(self)
 
     '''
     Checks if a rochade is possible or not

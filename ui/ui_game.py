@@ -16,11 +16,11 @@ class Game:
         self.game = GameRun(self, random.randint(1, 2), self.mode)
         self.images = {}
         for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
-                    "rook_w", "pawn_w"]:
+                    "rook_w", "pawn_w", "king_red", "king_w_red"]:
             image = Image.open("pictures/" + pic + ".png")
             if pic == "pawn" or pic == "pawn_w":
                 image = image.resize((60, 60), Image.ANTIALIAS)
-            elif pic == "king" or pic == "king_w" or pic == "queen" or pic == "queen_w":
+            elif pic == "king" or pic == "king_w" or pic == "queen" or pic == "queen_w" or pic == "king_red" or pic == "king_w_red":
                 image = image.resize((90, 90), Image.ANTIALIAS)
             else:
                 image = image.resize((80, 80), Image.ANTIALIAS)
