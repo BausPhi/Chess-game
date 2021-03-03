@@ -5,6 +5,7 @@ if typing.TYPE_CHECKING:
 
 from game.field import Field
 from game.ai import AI
+from game.figures import *
 
 
 class GameRun:
@@ -109,6 +110,13 @@ class GameRun:
     Change the turn
     '''
     def after_move(self):
+        # change pawns at end
+        figure = self.field.pawn_at_end(self.turn)
+        if figure is not None:
+            if self.turn == 1:
+                self.field.points[figure.position[0]][figure.position[1]] = Queen(color="w", pos=figure.position)
+            else:
+                self.field.points[figure.position[0]][figure.position[1]] = Queen(color="b", pos=figure.position)
         # swap turn
         turn = self.turn
         if self.turn == 1:
