@@ -87,12 +87,16 @@ class GameRun:
             figure_end = self.field.points[pos_end[0]][pos_end[1]]
             # If the same tile as before is clicked => do nothing
             if pos_start == pos_end:
+                for i in range(64):
+                    if self.ui.tiles[i][0].cget("borderwidth") == 4:
+                        self.ui.tiles[i][0].config(borderwidth=2, relief="flat")
                 return False
             # Needed to directly swap the chosen figure instead of dechoosing the last one
             # and then the choosing another one
             if figure.color == figure_end.color:
                 self.ui.tiles[marked_pos][0].config(borderwidth=2, relief="flat")
                 self.ui.tiles[posy * 8 + posx][0].config(borderwidth=8, relief="groove")
+                self.before_move(figure_end)
             # If the clicked figure has a possible move to the field where you clicked => execute it
             for move in figure.moves:
                 if move["end"] == pos_end:
@@ -174,8 +178,12 @@ class GameRun:
     def before_move(self, figure):                # TODO
         if self.turn == 1 and figure.color == "w":
             figure.update_possible_moves(self.field)
+            for move in figure.moves:
+                self.ui.tiles[move["end"][1] * 8 + move["end"][0]][0].config(borderwidth=4, relief="solid")
         if self.turn == 2 and figure.color == "b":
             figure.update_possible_moves(self.field)
+            for move in figure.moves:
+                self.ui.tiles[move["end"][1] * 8 + move["end"][0]][0].config(borderwidth=4, relief="solid")
         return
 
 
