@@ -114,8 +114,7 @@ class Field:
     that would do the next turn)
     '''
     def is_draw(self, player):               # TODO FIX IT (If king cant move anywhere because of own figures => no draw)
-        return False
-        '''if self.is_mate(player):
+        if self.is_mate(player):
             return False
         if player == 1:
             color = "b"
@@ -124,18 +123,19 @@ class Field:
         moves = []
         for row in self.points:
             for figure in row:
-                if figure.name == "King" and figure.color == color:
-                    moves = figure.moves
+                if figure.color == color:
+                    moves_get = figure.get_possible_moves(self)
+                    for move in moves_get:
+                        moves.append(move)
         if not moves:
-            return False
+            return True
         for move in moves:
             copy_field = self.field_copy()
-            copy_field[move['end'][0]][move['end'][1]] = copy_field[move['start'][0]][move['start'][1]]
-            copy_field[move['start'][0]][move['start'][1]] = Empty(pos=(move['start'][0], move['start'][1]))
-            copy_field = Field(beginning=False, empty=False, field=copy_field)
+            copy_field.points[move['end'][0]][move['end'][1]] = copy_field.points[move['start'][0]][move['start'][1]]
+            copy_field.points[move['start'][0]][move['start'][1]] = Empty(pos=(move['start'][0], move['start'][1]))
             if not copy_field.is_mate(player):
                 return False
-        return True'''
+        return True
 
     '''
     Checks if a rochade is possible or not

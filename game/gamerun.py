@@ -119,6 +119,7 @@ class GameRun:
         self.change_gui_after_move()
         # check for mate, chec_mate and a draw
         if self.field.is_draw(turn):
+            print("DRAW")
             return True
         elif self.field.is_check_mate(turn):
             print("CHECK MATE")

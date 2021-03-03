@@ -140,7 +140,7 @@ class Mate(unittest.TestCase):
         field.points[2][1] = Empty(pos=(2, 1))
         self.assertEqual(True, field.is_mate(1))
 
-'''class Draw(unittest.TestCase):
+class Draw(unittest.TestCase):
     def test_draw_1(self):
         field = Field(beginning=False, empty=True, field=None)
         field.points[4][0] = King(color="b", pos=(4, 0))
@@ -160,5 +160,13 @@ class Mate(unittest.TestCase):
     def test_no_draw_2(self):
         field = Field(beginning=True, empty=False, field=None)
         field.move_figure((3, 6), (3, 5))
+        self.assertEqual(False, field.is_draw(1))
+
+    def test_draw_2(self):
+        field = Field(beginning=False, empty=True, field=None)
+        field.points[4][0] = King(color="b", pos=(4, 0))
+        field.points[4][1] = Pawn(color="w", pos=(4, 1))
+        field.points[3][2] = Pawn(color="w", pos=(3, 2))
+        field.points[4][2] = Queen(color="w", pos=(4, 2))
         field.print_board()
-        self.assertEqual(False, field.is_draw(1))'''
+        self.assertEqual(True, field.is_draw(1))
