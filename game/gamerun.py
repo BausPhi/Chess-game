@@ -18,7 +18,7 @@ class GameRun:
         self.a12 = AI()
         pass
 
-    def execute_move(self, widget, tiles):                               # TODO
+    def execute_move(self, widget, tiles):
         # get information about the clicked tile
         clicked_tile, posx, posy = get_clicked_tile(widget, tiles)
 
@@ -132,7 +132,7 @@ class GameRun:
     Updates the figures on the UI after the move, changes the label
     that shows the current player's turn etc.
     '''
-    def change_gui_after_move(self):     # TODO
+    def change_gui_after_move(self):
         self.ui.turn_label.config(text="Player " + str(self.turn) + ", it is your turn")
         for tile in self.ui.tiles:
             tile[0].config(borderwidth=2, relief="flat")
@@ -175,7 +175,7 @@ class GameRun:
     Is called when the player marks a figure that he would
     like to move
     '''
-    def before_move(self, figure):                # TODO
+    def before_move(self, figure):
         for i in range(64):
             if self.ui.tiles[i][0].cget("borderwidth") == 4:
                 self.ui.tiles[i][0].config(borderwidth=2, relief="flat")
@@ -202,4 +202,3 @@ def get_clicked_tile(widget, tiles):
             posy = tile[2]
             clicked_tile = tile[0]
     return clicked_tile, posx, posy
-
