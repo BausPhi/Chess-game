@@ -150,6 +150,7 @@ class Queen(Figure):
         y = self.position[1]
         possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
         possible_left, possible_down, possible_right, possible_up = True, True, True, True
+        self.moves = []
         for i in range(1, 8):
             temp_moves, possible_left_up = self.possible_moves_left_up(field, x, y, i, possible_left_up)
             for move in temp_moves:

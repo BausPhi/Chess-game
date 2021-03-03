@@ -113,7 +113,7 @@ class Field:
     (always takes the number of the player 
     that would do the next turn)
     '''
-    def is_draw(self, player):               # TODO FIX IT
+    def is_draw(self, player):               # TODO FIX IT (If king cant move anywhere because of own figures => no draw)
         return False
         '''if self.is_mate(player):
             return False
