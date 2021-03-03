@@ -37,13 +37,14 @@ class Field:
         if self.points[end[0]][end[1]].name == "King" or self.points[end[0]][end[1]].name == "Rook":
             self.points[end[0]][end[1]].rochade = False
         # rochade move tower
-        for row in self.points:
-            for figure in row:
-                if figure.name == "Rook" and len(figure.moves) == 1:
-                    self.points[figure.moves[0]["end"][0]][figure.moves[0]["end"][1]] = copy.deepcopy(self.points[figure.position[0]][figure.position[1]])
-                    self.points[figure.moves[0]["end"][0]][figure.moves[0]["end"][1]].position = (figure.moves[0]["end"][0], figure.moves[0]["end"][1])
-                    self.points[figure.position[0]][figure.position[1]] = Empty(pos=(figure.position[0], figure.position[1]))
-                    return
+        if (start == (3, 7) and (end == (1, 7) or end == (5, 7))) or (start == (3, 0) and (end == (1, 0) or end == (5, 0))):
+            for row in self.points:
+                for figure in row:
+                    if figure.name == "Rook" and len(figure.moves) == 1 and figure.moves[0]["end"][1] == end[1] and (figure.moves[0]["end"][0] == end[0]-1 or figure.moves[0]["end"][0] == end[0]+1):
+                        self.points[figure.moves[0]["end"][0]][figure.moves[0]["end"][1]] = copy.deepcopy(self.points[figure.position[0]][figure.position[1]])
+                        self.points[figure.moves[0]["end"][0]][figure.moves[0]["end"][1]].position = (figure.moves[0]["end"][0], figure.moves[0]["end"][1])
+                        self.points[figure.position[0]][figure.position[1]] = Empty(pos=(figure.position[0], figure.position[1]))
+                        return
         return
 
     '''
