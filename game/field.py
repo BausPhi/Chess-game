@@ -50,6 +50,7 @@ class Field:
                             self.destroyed_w.append(figure2)
                         else:
                             self.destroyed_b.append(figure2)
+        self.sort_destroyed_figures()
         # In next move, clear the "Bauernschlag" field
         for i in range(8):
             for j in range(8):
@@ -172,13 +173,6 @@ class Field:
         return True
 
     '''
-    Checks if a rochade is possible or not
-    Returns a list of towers, a rochade is possible with
-    '''
-    def rochade_possible(self, turn):              # TODO
-        pass
-
-    '''
     Checks if there is a pawn at the end of the field
     and returns the pawn if there is one, else None
     '''
@@ -194,6 +188,51 @@ class Field:
                     if isinstance(figure, Pawn) and figure.color == "w":
                         return figure
         return None
+
+    '''
+    Sorts the list of all destroyed figures
+    '''
+    def sort_destroyed_figures(self):
+        new_w = []
+        new_b = []
+        for i in range(16):
+            if i < len(self.destroyed_w):
+                if self.destroyed_w[i].name == "Queen":
+                    new_w.append(self.destroyed_w[i])
+            elif i < len(self.destroyed_b):
+                if self.destroyed_b[i].name == "Queen":
+                    new_b.append(self.destroyed_b[i])
+        for i in range(16):
+            if i < len(self.destroyed_w):
+                if self.destroyed_w[i].name == "Rook":
+                    new_w.append(self.destroyed_w[i])
+            elif i < len(self.destroyed_b):
+                if self.destroyed_b[i].name == "Rook":
+                    new_b.append(self.destroyed_b[i])
+        for i in range(16):
+            if i < len(self.destroyed_w):
+                if self.destroyed_w[i].name == "Knight":
+                    new_w.append(self.destroyed_w[i])
+            elif i < len(self.destroyed_b):
+                if self.destroyed_b[i].name == "Knight":
+                    new_b.append(self.destroyed_b[i])
+        for i in range(16):
+            if i < len(self.destroyed_w):
+                if self.destroyed_w[i].name == "Bishop":
+                    new_w.append(self.destroyed_w[i])
+            elif i < len(self.destroyed_b):
+                if self.destroyed_b[i].name == "Bishop":
+                    new_b.append(self.destroyed_b[i])
+        for i in range(16):
+            if i < len(self.destroyed_w):
+                if self.destroyed_w[i].name == "Pawn":
+                    new_w.append(self.destroyed_w[i])
+            elif i < len(self.destroyed_b):
+                if self.destroyed_b[i].name == "Pawn":
+                    new_b.append(self.destroyed_b[i])
+        self.destroyed_w = new_w
+        self.destroyed_b = new_b
+
 
     '''
     Prints the board for debugging code
