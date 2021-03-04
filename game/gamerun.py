@@ -20,6 +20,7 @@ class GameRun:
         elif mode == 2:
             self.a12 = AI()
         pass
+        self.saved_game_scenarios = [self.field.points]
 
     def execute_move(self, widget, tiles):
         # get information about the clicked tile
@@ -130,6 +131,7 @@ class GameRun:
         # update gui
         draw = self.change_gui_after_move()
         # check for mate, chec_mate and a draw
+        self.saved_game_scenarios.append(copy.deepcopy(self.field.points))
         if self.field.is_draw(turn) or draw:
             print("DRAW")
             return True
@@ -194,7 +196,10 @@ class GameRun:
             self.ui.white_destroyed_labels[i].config(image=self.ui.small_images[self.field.destroyed_w[i].name.lower() + "_w"])
         if self.field.useless_moves >= 100:
             return True
+        if self.three_times_same_scenario():
+            return True
         return False
+
     '''
     Updates the new possible moves for a player
     and marks it on the field.
@@ -214,6 +219,33 @@ class GameRun:
             for move in figure.moves:
                 self.ui.tiles[move["end"][1] * 8 + move["end"][0]][0].config(borderwidth=4, relief="solid")
         return
+
+    '''
+    Checks if we had three times the same field
+    (the same figures were on the same field)
+    '''
+    def three_times_same_scenario(self):
+        count = 0
+        for scenario in self.saved_game_scenarios:
+            if self.compare_scenarios(scenario):
+                count += 1
+            if count >= 3:
+                return True
+        if count < 3:
+            return False
+
+    '''
+    Compare two different scenarios and return
+    if they are the same or not
+    '''
+    def compare_scenarios(self, scenario):
+        for i in range(8):
+            for j in range(8):
+                #print(self.field.points[i][j].name)
+                #print(scenario[i][j].name)
+                if self.field.points[i][j].name != scenario[i][j].name:
+                    return False
+        return True
 
 
 '''
