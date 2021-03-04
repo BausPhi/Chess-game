@@ -106,9 +106,10 @@ class Field:
         moves = []
         for row in self.points:
             for figure in row:
-                if figure.name == "King" and figure.color == color:
+                if figure.color == color:
                     figure.update_possible_moves(self)
-                    moves = figure.moves
+                    for move in figure.moves:
+                        moves.append(move)
         for move in moves:
             copy_field = self.field_copy().points
             copy_field[move['end'][0]][move['end'][1]] = copy_field[move['start'][0]][move['start'][1]]
