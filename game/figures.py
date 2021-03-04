@@ -11,7 +11,6 @@ class Figure(ABC):
         self.color = color  # ID of a figure together with name
         self.position = position  # ID of a figure
         self.moves = moves
-        self.created = False
 
     '''
     Calculates all possible moves for the current

@@ -33,11 +33,9 @@ class Field:
         figure = self.points[start[0]][start[1]]
         if not isinstance(self.points[end[0]][end[1]], Empty):
             if self.points[end[0]][end[1]].color == "w":
-                if not self.points[end[0]][end[1]].created:
-                    self.destroyed_w.append(self.points[end[0]][end[1]])
+                self.destroyed_w.append(self.points[end[0]][end[1]])
             else:
-                if not self.points[end[0]][end[1]].created:
-                    self.destroyed_b.append(self.points[end[0]][end[1]])
+                self.destroyed_b.append(self.points[end[0]][end[1]])
         # Execute "Bauernschlag
         if figure.name == "Pawn":
             figure.last_move = []
@@ -232,7 +230,6 @@ class Field:
                     new_b.append(self.destroyed_b[i])
         self.destroyed_w = new_w
         self.destroyed_b = new_b
-
 
     '''
     Prints the board for debugging code
