@@ -15,8 +15,10 @@ class GameRun:
         self.turn = turn
         self.ui = ui
         self.mode = mode
-        self.ai = AI()
-        self.a12 = AI()
+        if mode == 1:
+            self.ai = AI()
+        elif mode == 2:
+            self.a12 = AI()
         pass
 
     def execute_move(self, widget, tiles):
@@ -126,9 +128,9 @@ class GameRun:
         else:
             self.turn = 1
         # update gui
-        self.change_gui_after_move()
+        draw = self.change_gui_after_move()
         # check for mate, chec_mate and a draw
-        if self.field.is_draw(turn):
+        if self.field.is_draw(turn) or draw:
             print("DRAW")
             return True
         elif self.field.is_check_mate(turn):
@@ -143,7 +145,6 @@ class GameRun:
                     else:
                         if figure.name == "King" and figure.color == "b":
                             self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_red"])
-            # TODO Mark king that is mate
             return False
         return False
 
@@ -191,6 +192,9 @@ class GameRun:
             self.ui.black_destroyed_labels[i].config(image=self.ui.small_images[self.field.destroyed_b[i].name.lower()])
         for i in range(len(self.field.destroyed_w)):
             self.ui.white_destroyed_labels[i].config(image=self.ui.small_images[self.field.destroyed_w[i].name.lower() + "_w"])
+        if self.field.useless_moves >= 100:
+            return True
+        return False
     '''
     Updates the new possible moves for a player
     and marks it on the field.

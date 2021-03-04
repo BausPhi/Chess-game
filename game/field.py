@@ -17,6 +17,7 @@ class Field:
             self.points = field
         self.destroyed_w = []
         self.destroyed_b = []
+        self.useless_moves = 0
 
     '''
     Converts the field to a one-hot encoded version.
@@ -31,6 +32,10 @@ class Field:
     '''
     def move_figure(self, start: tuple, end: tuple):
         figure = self.points[start[0]][start[1]]
+        if figure.name != "Pawn" and isinstance(self.points[end[0]][end[1]], Empty):
+            self.useless_moves += 1
+        else:
+            self.useless_moves = 0
         if not isinstance(self.points[end[0]][end[1]], Empty):
             if self.points[end[0]][end[1]].color == "w":
                 self.destroyed_w.append(self.points[end[0]][end[1]])
