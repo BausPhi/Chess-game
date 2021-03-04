@@ -15,6 +15,8 @@ class Field:
                     self.points[i][j] = Empty(pos=(i, j))
         else:
             self.points = field
+        self.destroyed_w = []
+        self.destroyed_b = []
 
     '''
     Converts the field to a one-hot encoded version.
@@ -29,6 +31,13 @@ class Field:
     '''
     def move_figure(self, start: tuple, end: tuple):
         figure = self.points[start[0]][start[1]]
+        if not isinstance(self.points[end[0]][end[1]], Empty):
+            if self.points[end[0]][end[1]].color == "w":
+                if not self.points[end[0]][end[1]].created:
+                    self.destroyed_w.append(self.points[end[0]][end[1]])
+            else:
+                if not self.points[end[0]][end[1]].created:
+                    self.destroyed_b.append(self.points[end[0]][end[1]])
         # Execute "Bauernschlag
         if figure.name == "Pawn":
             figure.last_move = []
@@ -37,6 +46,10 @@ class Field:
                     figure2 = self.points[i][j]
                     if figure2.name == "Pawn" and end == figure2.last_move:
                         self.points[figure2.position[0]][figure2.position[1]] = Empty(pos=(figure2.position[0], figure2.position[1]))
+                        if figure2.color == "w":
+                            self.destroyed_w.append(figure2)
+                        else:
+                            self.destroyed_b.append(figure2)
         # In next move, clear the "Bauernschlag" field
         for i in range(8):
             for j in range(8):
@@ -181,12 +194,6 @@ class Field:
                     if isinstance(figure, Pawn) and figure.color == "w":
                         return figure
         return None
-
-    '''
-    Converts a pawn to a given figure
-    '''
-    def convert_pawn(self, pawn, figure):          # TODO
-        pass
 
     '''
     Prints the board for debugging code

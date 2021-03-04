@@ -12,7 +12,7 @@ class Game:
 
         # mode: 0 = Player vs Player, 1 = Player vs AI, 2 = AI vs AI
         self.mode = mode
-        self.gui = tk.Toplevel()
+        self.gui = tk.Toplevel(background='#2E3436')
         self.game = GameRun(self, random.randint(1, 2), self.mode)
         self.images = {}
         for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
@@ -25,6 +25,12 @@ class Game:
             else:
                 image = image.resize((80, 80), Image.ANTIALIAS)
             self.images[pic] = ImageTk.PhotoImage(image=image)
+        self.small_images = {}
+        for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
+                    "rook_w", "pawn_w", "king_red", "king_w_red"]:
+            image = Image.open("pictures/" + pic + ".png")
+            image = image.resize((25, 25), Image.ANTIALIAS)
+            self.small_images[pic] = ImageTk.PhotoImage(image=image)
 
         # gui elements
         self.frames = []
@@ -58,6 +64,15 @@ class Game:
         else:
             self.turn_label = tk.Label(self.turn_frame, text="Player " + str(self.game.turn) + ", it is your turn",
                                        bd=5, relief="solid")
+        self.white_destroyed_frames, self.black_destroyed_frames = [], []
+        self.white_destroyed_labels, self.black_destroyed_labels = [], []
+        self.black_destroyed_frame = []
+        for i in range(2):
+            for j in range(8):
+                self.white_destroyed_frames.append(tk.Frame(self.gui, width=25, height=25, background="grey"))
+                self.black_destroyed_frames.append(tk.Frame(self.gui, width=25, height=25, background="grey"))
+                self.white_destroyed_labels.append(tk.Label(self.white_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
+                self.black_destroyed_labels.append(tk.Label(self.black_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
 
     def start_game(self):
         self.gui.title("Chess")
@@ -100,11 +115,20 @@ class Game:
         self.turn_frame.place(x=300, y=825)
         self.turn_label.pack(fill=BOTH, expand=True)
         self.turn_label.place(x=0, y=0, width=200, height=50)
+        for i in range(2):
+            for j in range(8):
+                self.white_destroyed_frames[i*8+j].pack()
+                self.white_destroyed_frames[i*8+j].place(x=30+30*j, y=822+i*30)
+                self.white_destroyed_labels[i*8+j].pack(fill=BOTH, expand=True)
+                self.white_destroyed_labels[i*8+j].place(x=0, y=0, width=25, height=25)
+                self.black_destroyed_frames[i*8+j].pack()
+                self.black_destroyed_frames[i*8+j].place(x=530+30*j, y=822+i*30)
+                self.black_destroyed_labels[i*8+j].pack(fill=BOTH, expand=True)
+                self.black_destroyed_labels[i*8+j].place(x=0, y=0, width=25, height=25)
         # If mode = 2, then 2 AI are batteling each other, so we dont click anywhere
         if self.mode == 2:
             self.gui.after(0, self.game.run_game_multiple_ai)
         self.gui.mainloop()
-        pass
 
     def on_click(self, event):
         if self.game.execute_move(event.widget, self.tiles):

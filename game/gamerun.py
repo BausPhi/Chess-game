@@ -115,8 +115,10 @@ class GameRun:
         if figure is not None:
             if self.turn == 1:
                 self.field.points[figure.position[0]][figure.position[1]] = Queen(color="w", pos=figure.position)
+                self.field.points[figure.position[0]][figure.position[1]].created = True
             else:
                 self.field.points[figure.position[0]][figure.position[1]] = Queen(color="b", pos=figure.position)
+                self.field.points[figure.position[0]][figure.position[1]].created = True
         # swap turn
         turn = self.turn
         if self.turn == 1:
@@ -185,7 +187,10 @@ class GameRun:
                         self.ui.tiles[pos_tile][0].config(image=self.ui.images["bishop"])
                 else:
                     self.ui.tiles[pos_tile][0].config(image='')
-
+        for i in range(len(self.field.destroyed_b)):
+            self.ui.black_destroyed_labels[i].config(image=self.ui.small_images[self.field.destroyed_b[i].name.lower()])
+        for i in range(len(self.field.destroyed_w)):
+            self.ui.white_destroyed_labels[i].config(image=self.ui.small_images[self.field.destroyed_w[i].name.lower() + "_w"])
     '''
     Updates the new possible moves for a player
     and marks it on the field.
