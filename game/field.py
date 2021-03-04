@@ -199,35 +199,35 @@ class Field:
             if i < len(self.destroyed_w):
                 if self.destroyed_w[i].name == "Queen":
                     new_w.append(self.destroyed_w[i])
-            elif i < len(self.destroyed_b):
+            if i < len(self.destroyed_b):
                 if self.destroyed_b[i].name == "Queen":
                     new_b.append(self.destroyed_b[i])
         for i in range(16):
             if i < len(self.destroyed_w):
                 if self.destroyed_w[i].name == "Rook":
                     new_w.append(self.destroyed_w[i])
-            elif i < len(self.destroyed_b):
+            if i < len(self.destroyed_b):
                 if self.destroyed_b[i].name == "Rook":
                     new_b.append(self.destroyed_b[i])
         for i in range(16):
             if i < len(self.destroyed_w):
                 if self.destroyed_w[i].name == "Knight":
                     new_w.append(self.destroyed_w[i])
-            elif i < len(self.destroyed_b):
+            if i < len(self.destroyed_b):
                 if self.destroyed_b[i].name == "Knight":
                     new_b.append(self.destroyed_b[i])
         for i in range(16):
             if i < len(self.destroyed_w):
                 if self.destroyed_w[i].name == "Bishop":
                     new_w.append(self.destroyed_w[i])
-            elif i < len(self.destroyed_b):
+            if i < len(self.destroyed_b):
                 if self.destroyed_b[i].name == "Bishop":
                     new_b.append(self.destroyed_b[i])
         for i in range(16):
             if i < len(self.destroyed_w):
                 if self.destroyed_w[i].name == "Pawn":
                     new_w.append(self.destroyed_w[i])
-            elif i < len(self.destroyed_b):
+            if i < len(self.destroyed_b):
                 if self.destroyed_b[i].name == "Pawn":
                     new_b.append(self.destroyed_b[i])
         self.destroyed_w = new_w
