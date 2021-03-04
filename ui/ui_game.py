@@ -74,13 +74,11 @@ class Game:
                 self.white_destroyed_labels.append(tk.Label(self.white_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
                 self.black_destroyed_labels.append(tk.Label(self.black_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
         # end screen
-        self.game_end_frame = tk.Frame(self.gui, width=800, height=900)#, background='#2E3436')
+        self.game_end_frame = tk.Frame(self.gui, width=800, height=100)
         self.button_frame1 = tk.Frame(self.game_end_frame, width=200, height=30)
         self.button_frame2 = tk.Frame(self.game_end_frame, width=200, height=30)
-        self.label_frame = tk.Frame(self.game_end_frame, width=200, height=30)
         self.game_end_button_exit = tk.Button(self.button_frame1, text="Exit Game", command=self.quit_game)
         self.game_end_button_menu = tk.Button(self.button_frame2, text="Go to the menu", command=self.go_to_menu)
-        self.text_label = tk.Label(self.label_frame, text="")
 
     def start_game(self):
         self.gui.title("Chess")
@@ -143,25 +141,22 @@ class Game:
         if game_over:
             if result == "Check Mate":
                 self.pack_end()
-                self.text_label.config(text="Player " + str(winner) + " won!")
+                self.turn_label.config(text="Player " + str(winner) + " won!")
             else:
                 self.pack_end()
-                self.text_label.config(text="Draw!")
+                self.turn_label.config(text="Draw!")
 
     def pack_end(self):
-        self.gui.geometry('%dx%d+%d+%d' % (400, 350, 760, 300))
+        self.gui.geometry('%dx%d+%d+%d' % (800, 950, 600, 60))
         self.game_end_frame.pack_propagate(0)
         self.game_end_frame.pack()
+        self.game_end_frame.place(x=0, y=900)
         self.button_frame1.pack_propagate(0)
         self.button_frame1.pack()
-        self.button_frame1.place(x=100, y=200)
+        self.button_frame1.place(x=150, y=0)
         self.button_frame2.pack_propagate(0)
         self.button_frame2.pack()
-        self.button_frame2.place(x=100, y=150)
-        self.label_frame.pack_propagate(0)
-        self.label_frame.pack()
-        self.label_frame.place(x=100, y=100)
-        self.text_label.pack(fill=BOTH, expand=True)
+        self.button_frame2.place(x=450, y=0)
         self.game_end_button_exit.pack(fill=BOTH, expand=True)
         self.game_end_button_menu.pack(fill=BOTH, expand=True)
 

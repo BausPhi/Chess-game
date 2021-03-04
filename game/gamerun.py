@@ -136,6 +136,14 @@ class GameRun:
         if self.field.is_draw(turn) or draw:
             return True, "Draw", 0
         elif self.field.is_check_mate(turn):
+            for row in self.field.points:
+                for figure in row:
+                    if self.turn == 1:
+                        if figure.name == "King" and figure.color == "w":
+                            self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_w_red"])
+                    else:
+                        if figure.name == "King" and figure.color == "b":
+                            self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_red"])
             return True, "Check Mate", turn
         elif self.field.is_mate(turn):
             for row in self.field.points:
@@ -240,8 +248,6 @@ class GameRun:
     def compare_scenarios(self, scenario):
         for i in range(8):
             for j in range(8):
-                #print(self.field.points[i][j].name)
-                #print(scenario[i][j].name)
                 if self.field.points[i][j].name != scenario[i][j].name:
                     return False
         return True
