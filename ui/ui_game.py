@@ -73,6 +73,7 @@ class Game:
                 self.black_destroyed_frames.append(tk.Frame(self.gui, width=25, height=25, background="grey"))
                 self.white_destroyed_labels.append(tk.Label(self.white_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
                 self.black_destroyed_labels.append(tk.Label(self.black_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
+        # self.game_end_frame = tk.Frame
 
     def start_game(self):
         self.gui.title("Chess")
@@ -131,7 +132,9 @@ class Game:
         self.gui.mainloop()
 
     def on_click(self, event):
-        if self.game.execute_move(event.widget, self.tiles):
-            return
-        else:
-            return
+        game_over, result, winner = self.game.execute_move(event.widget, self.tiles)
+        if game_over:
+            if result == "Check Mate":    # TODO Winner Screen
+                pass
+            else:                         # TODO Draw Screen
+                pass

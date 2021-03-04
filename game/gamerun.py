@@ -94,7 +94,7 @@ class GameRun:
                 for i in range(64):
                     if self.ui.tiles[i][0].cget("borderwidth") == 4:
                         self.ui.tiles[i][0].config(borderwidth=2, relief="flat")
-                return False
+                return False, "", 0
             # Unmarks the current figure and marks the new figure
             if figure.color == figure_end.color:
                 self.ui.tiles[marked_pos][0].config(borderwidth=2, relief="flat")
@@ -105,7 +105,8 @@ class GameRun:
                 if move["end"] == pos_end:
                     self.field.move_figure(move["start"], move["end"])
                     return self.after_move()
-            return False
+            return False, "", 0
+        return False, "", 0
 
     '''
     Check for check mate, mate and a draw
@@ -133,11 +134,9 @@ class GameRun:
         # check for mate, chec_mate and a draw
         self.saved_game_scenarios.append(copy.deepcopy(self.field.points))
         if self.field.is_draw(turn) or draw:
-            print("DRAW")
-            return True
+            return True, "Draw", 0
         elif self.field.is_check_mate(turn):
-            print("CHECK MATE")
-            return True
+            return True, "Check Mate", turn
         elif self.field.is_mate(turn):
             for row in self.field.points:
                 for figure in row:
@@ -147,8 +146,8 @@ class GameRun:
                     else:
                         if figure.name == "King" and figure.color == "b":
                             self.ui.tiles[figure.position[1] * 8 + figure.position[0]][0].config(image=self.ui.images["king_red"])
-            return False
-        return False
+            return False, "", 0
+        return False, "", 0
 
     '''
     Updates the figures on the UI after the move, changes the label
