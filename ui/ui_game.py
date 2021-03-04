@@ -74,10 +74,10 @@ class Game:
                 self.white_destroyed_labels.append(tk.Label(self.white_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
                 self.black_destroyed_labels.append(tk.Label(self.black_destroyed_frames[i*8+j], width=25, height=25, background="grey"))
         # end screen
-        self.game_end_frame = tk.Frame(self.gui, width=800, height=100)
+        self.game_end_frame = tk.Frame(self.gui, width=800, height=100, background='#2E3436')
         self.button_frame1 = tk.Frame(self.game_end_frame, width=200, height=30)
         self.button_frame2 = tk.Frame(self.game_end_frame, width=200, height=30)
-        self.game_end_button_exit = tk.Button(self.button_frame1, text="Exit Game", command=self.quit_game)
+        self.game_end_button_exit = tk.Button(self.button_frame1, text="Exit Game", command=quit_game)
         self.game_end_button_menu = tk.Button(self.button_frame2, text="Go to the menu", command=self.go_to_menu)
 
     def start_game(self):
@@ -163,5 +163,6 @@ class Game:
     def go_to_menu(self):
         self.gui.destroy()
 
-    def quit_game(self):
-        quit()
+
+def quit_game():
+    quit()
