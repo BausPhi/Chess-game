@@ -633,6 +633,7 @@ class Pawn(Figure):
     def __init__(self, color, pos):
         super().__init__("Pawn", pos, color, [])
         self.rochade = True
+        self.last_move = []
 
     def update_possible_moves(self, field):                   # TODO TEST
         self.moves = []
@@ -640,6 +641,11 @@ class Pawn(Figure):
         startx, starty = self.position[0], self.position[1]
         for move in moves:
             endx, endy = move[0], move[1]
+            for i in range(8):
+                for j in range(8):
+                    figure = field.points[i][j]
+                    if figure.name == "Pawn" and move == figure.last_move:
+                        self.moves.append({"start": self.position, "end": move})
             if startx != endx and starty != endy:
                 if field.points[endx][endy].color == other_color(self.color):
                     self.moves.append({"start": self.position, "end": move})

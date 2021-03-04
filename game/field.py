@@ -28,6 +28,27 @@ class Field:
     If king or rook moves set rochade to False
     '''
     def move_figure(self, start: tuple, end: tuple):
+        figure = self.points[start[0]][start[1]]
+        # Execute "Bauernschlag
+        if figure.name == "Pawn":
+            figure.last_move = []
+            for i in range(8):
+                for j in range(8):
+                    figure2 = self.points[i][j]
+                    if figure2.name == "Pawn" and end == figure2.last_move:
+                        self.points[figure2.position[0]][figure2.position[1]] = Empty(pos=(figure2.position[0], figure2.position[1]))
+        # In next move, clear the "Bauernschlag" field
+        for i in range(8):
+            for j in range(8):
+                if self.points[i][j].name == "Pawn":
+                    self.points[i][j].last_move = None
+        # Get last field for "Bauernschlag"
+        if figure.name == "Pawn" and abs(start[1] - end[1]) == 2:
+            if end[1] > start[1]:
+                figure.last_move = (start[0], start[1] + 1)
+            else:
+                figure.last_move = (start[0], start[1] - 1)
+        # move figure
         self.points[end[0]][end[1]] = self.points[start[0]][start[1]]
         self.points[end[0]][end[1]].position = (end[0], end[1])
         self.points[start[0]][start[1]] = Empty(pos=(start[0], start[1]))
