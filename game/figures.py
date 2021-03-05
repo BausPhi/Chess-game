@@ -641,6 +641,7 @@ class Pawn(Figure):
         startx, starty = self.position[0], self.position[1]
         for move in moves:
             endx, endy = move[0], move[1]
+            # en passant move check
             for i in range(8):
                 for j in range(8):
                     figure = field.points[i][j]

@@ -13,7 +13,7 @@ class Game:
         # mode: 0 = Player vs Player, 1 = Player vs AI, 2 = AI vs AI
         self.mode = mode
         self.gui = tk.Toplevel(background='#2E3436')
-        self.game = GameRun(self, random.randint(1, 2), self.mode)
+        self.game = GameRun(self, 1, self.mode)
         self.images = {}
         for pic in ["king", "queen", "bishop", "knight", "rook", "pawn", "king_w", "queen_w", "bishop_w", "knight_w",
                     "rook_w", "pawn_w", "king_red", "king_w_red"]:
@@ -42,6 +42,7 @@ class Game:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
                         self.tiles.append((tk.Label(self.frames[8*i+j], bg="grey"), j, i))
                         self.tiles[8*i+j][0].bind("<Button-1>", self.on_click)
+                        # unbind removes the click function
                     else:
                         self.frames.append(tk.Frame(self.gui, width=100, height=100, background="grey"))
                         self.tiles.append((tk.Label(self.frames[8*i+j], bg="#B47D49"), j, i))
