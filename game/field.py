@@ -31,17 +31,19 @@ class Field:
     If king or rook moves set rochade to False
     '''
     def move_figure(self, start: tuple, end: tuple):
+        # 50 moves rule
         figure = self.points[start[0]][start[1]]
         if figure.name != "Pawn" and isinstance(self.points[end[0]][end[1]], Empty):
             self.useless_moves += 1
         else:
             self.useless_moves = 0
+        # save destroyed figures
         if not isinstance(self.points[end[0]][end[1]], Empty):
             if self.points[end[0]][end[1]].color == "w":
                 self.destroyed_w.append(self.points[end[0]][end[1]])
             else:
                 self.destroyed_b.append(self.points[end[0]][end[1]])
-        # Execute "Bauernschlag
+        # Execute "en passant"
         if figure.name == "Pawn":
             figure.last_move = []
             for i in range(8):
@@ -54,12 +56,12 @@ class Field:
                         else:
                             self.destroyed_b.append(figure2)
         self.sort_destroyed_figures()
-        # In next move, clear the "Bauernschlag" field
+        # Clear last_move again after the opponents move as "en passant" can only be done in the opponent's next move
         for i in range(8):
             for j in range(8):
                 if self.points[i][j].name == "Pawn":
                     self.points[i][j].last_move = None
-        # Get last field for "Bauernschlag"
+        # If a pawn moved two fields, save the last_move for "en passant"
         if figure.name == "Pawn" and abs(start[1] - end[1]) == 2:
             if end[1] > start[1]:
                 figure.last_move = (start[0], start[1] + 1)
@@ -96,7 +98,7 @@ class Field:
     If yes, the game is over (always takes the number
     of the player that would do the next turn)
     '''
-    def is_check_mate(self, player):      # TODO TEST
+    def is_check_mate(self, player):
         if not self.is_mate(player):
             return False
         if player == 1:
@@ -124,7 +126,7 @@ class Field:
     If yes, the game is over (always takes the number
     of the player that would do the next turn)
     '''
-    def is_mate(self, player):               # TODO TEST
+    def is_mate(self, player):
         if player == 1:
             enemy_color = "w"
             color = "b"
@@ -152,7 +154,7 @@ class Field:
     (always takes the number of the player 
     that would do the next turn)
     '''
-    def is_draw(self, player):               # TODO FIX IT (If king cant move anywhere because of own figures => no draw)
+    def is_draw(self, player):
         if self.is_mate(player):
             return False
         if player == 1:
