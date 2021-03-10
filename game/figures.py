@@ -61,7 +61,6 @@ class King(Figure):
             if field.points[move[0]][move[1]].color != self.color:
                 self.moves.append({"start": self.position, "end": move})
         moves = copy.deepcopy(self.moves)
-        self.moves = []
         for move in moves:
             field_copy = field.field_copy()
             field_copy.move_figure(move["start"], move["end"])
@@ -146,11 +145,11 @@ class Queen(Figure):
         self.rochade = None
 
     def update_possible_moves(self, field):                   # TODO TEST
+        self.moves = []
         x = self.position[0]
         y = self.position[1]
         possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
         possible_left, possible_down, possible_right, possible_up = True, True, True, True
-        self.moves = []
         for i in range(1, 8):
             temp_moves, possible_left_up = self.possible_moves_left_up(field, x, y, i, possible_left_up)
             for move in temp_moves:
@@ -347,6 +346,7 @@ class Rook(Figure):
         self.rochade = True
 
     def update_possible_moves(self, field):                   # TODO TEST
+        self.moves = []
         x = self.position[0]
         y = self.position[1]
         possible_left, possible_down, possible_right, possible_up = True, True, True, True
@@ -517,6 +517,7 @@ class Bishop(Figure):
         self.rochade = True
 
     def update_possible_moves(self, field):                   # TODO TEST
+        self.moves = []
         x = self.position[0]
         y = self.position[1]
         possible_left_up, possible_left_down, possible_right_up, possible_right_down = True, True, True, True
