@@ -645,7 +645,7 @@ class Pawn(Figure):
             for i in range(8):
                 for j in range(8):
                     figure = field.points[i][j]
-                    if figure.name == "Pawn" and move == figure.last_move:
+                    if figure.name == "Pawn" and move == figure.last_move and figure.color != self.color:
                         self.moves.append({"start": self.position, "end": move})
             if startx != endx and starty != endy:
                 if field.points[endx][endy].color == other_color(self.color):

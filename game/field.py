@@ -49,7 +49,7 @@ class Field:
             for i in range(8):
                 for j in range(8):
                     figure2 = self.points[i][j]
-                    if figure2.name == "Pawn" and end == figure2.last_move:
+                    if figure2.name == "Pawn" and end == figure2.last_move and figure.color != figure2.color:
                         self.points[figure2.position[0]][figure2.position[1]] = Empty(pos=(figure2.position[0], figure2.position[1]))
                         if figure2.color == "w":
                             self.destroyed_w.append(figure2)
