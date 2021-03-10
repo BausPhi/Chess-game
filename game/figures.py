@@ -61,6 +61,7 @@ class King(Figure):
             if field.points[move[0]][move[1]].color != self.color:
                 self.moves.append({"start": self.position, "end": move})
         moves = copy.deepcopy(self.moves)
+        self.moves = []
         for move in moves:
             field_copy = field.field_copy()
             field_copy.move_figure(move["start"], move["end"])
